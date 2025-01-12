@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Commerce.Command.Application\Commerce.Command.Application.csproj" />
+    <ProjectReference Include="..\Commerce.Command.Infrastructure\Commerce.Command.Infrastructure.csproj" />
+    <ProjectReference Include="..\Commerce.Command.Presentation\Commerce.Command.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>

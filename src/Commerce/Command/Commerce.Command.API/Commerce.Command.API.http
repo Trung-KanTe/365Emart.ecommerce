@@ -1,0 +1,6 @@
+@Commerce.Command.API_HostAddress = http://localhost:5101
+
+GET {{Commerce.Command.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
