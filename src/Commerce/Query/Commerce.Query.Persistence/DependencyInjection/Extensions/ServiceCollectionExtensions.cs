@@ -74,11 +74,13 @@ namespace Commerce.Query.Persistence.DependencyInjection.Extensions
             services.AddScoped<IPartnerRepository, PartnerRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IClassificationRepository, ClassificationRepository>();
+            services.AddScoped<IClassificationCategoryRepository, ClassificationCategoryRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher>();
             services.AddScoped<ISignManager, SignManager>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
             services.AddScoped<IWareHouseRepository, WareHouseRepository>();
             services.AddScoped<IImportProductRepository, ImportProductRepository>();
             services.AddScoped<IImportProductDetailRepository, ImportProductDetailRepository>();

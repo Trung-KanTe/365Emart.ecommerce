@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Promotion
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.PROMOTION_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class promotionService : ApiController
     {
         private readonly IMediator mediator;

@@ -1,4 +1,5 @@
-﻿using Commerce.Query.Domain.Abstractions.Entities;
+﻿using Commerce.Query.Contract.Shared;
+using Commerce.Query.Domain.Abstractions.Entities;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -94,5 +95,12 @@ namespace Commerce.Query.Domain.Abstractions.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns>Database transaction, can be commited and rollback</returns>
         Task<IDbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+
+        Task<PaginatedResult<TEntity>> GetPaginatedResultAsync(
+            int pageNumber,
+            int pageSize,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            bool isTracking = false,
+            params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

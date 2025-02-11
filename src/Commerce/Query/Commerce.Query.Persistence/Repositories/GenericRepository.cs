@@ -1,4 +1,5 @@
-﻿using Commerce.Query.Domain.Abstractions.Entities;
+﻿using Commerce.Query.Contract.Shared;
+using Commerce.Query.Domain.Abstractions.Entities;
 using Commerce.Query.Domain.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -196,6 +197,34 @@ namespace Commerce.Query.Persistence.Repositories
                 // Each property will be included into source
                 source = includeProperties.Aggregate(source, (current, include) => current.Include(include));
             return source;
+        }
+
+        public async Task<PaginatedResult<TEntity>> GetPaginatedResultAsync(
+            int pageNumber,
+            int pageSize,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            bool isTracking = false,
+            params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            // Tính tổng số bản ghi
+            var query = FindAll(predicate, isTracking, includeProperties);
+            var totalCount = await query.CountAsync();
+
+            // Lấy dữ liệu phân trang
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize) // Bỏ qua số bản ghi ở các trang trước
+                .Take(pageSize) // Lấy số bản ghi theo kích thước trang
+                .ToArrayAsync();
+
+            // Tạo đối tượng PaginatedResult để trả về
+            var result = new PaginatedResult<TEntity>(
+                pageNumber,
+                pageSize,
+                totalCount,
+                items
+            );
+
+            return result;
         }
     }
 }

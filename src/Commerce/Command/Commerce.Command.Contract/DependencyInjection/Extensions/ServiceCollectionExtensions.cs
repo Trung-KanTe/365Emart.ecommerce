@@ -1,9 +1,12 @@
-﻿using Commerce.Command.Contract.DependencyInjection.Options;
+﻿using Commerce.Command.Contract.Abstractions;
+using Commerce.Command.Contract.DependencyInjection.Options;
+using Commerce.Command.Contract.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using VNPAY.NET;
 
 namespace Commerce.Command.Contract.DependencyInjection.Extensions
 {
@@ -27,16 +30,17 @@ namespace Commerce.Command.Contract.DependencyInjection.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,                   // Kiểm tra Issuer
-                    ValidateAudience = true,                // Kiểm tra Audience
-                    ValidateLifetime = true,                // Kiểm tra thời gian hết hạn
-                    ValidateIssuerSigningKey = true,        // Kiểm tra khóa ký
-                    ValidIssuer = jwtSettings.Issuer,       // Giá trị Issuer từ cấu hình
-                    ValidAudience = jwtSettings.Audience,   // Giá trị Audience từ cấu hình
+                    ValidateIssuer = true,                   
+                    ValidateAudience = true,                
+                    ValidateLifetime = true,                
+                    ValidateIssuerSigningKey = true,        
+                    ValidIssuer = jwtSettings.Issuer,       
+                    ValidAudience = jwtSettings.Audience,   
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
                 };
             });
-
+            services.AddScoped<IVnpay, Vnpay>();
+            services.AddScoped<IFileService, FileService>();
             return services;
         }      
     }

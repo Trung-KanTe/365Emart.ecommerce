@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Order
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.ORDER_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class orderService : ApiController
     {
         private readonly IMediator mediator;

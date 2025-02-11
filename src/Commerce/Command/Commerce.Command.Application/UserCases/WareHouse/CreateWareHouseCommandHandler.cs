@@ -14,7 +14,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
         public string? Name { get; set; }
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = true;
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
             // Create new WareHouse from request
             Entities.WareHouse? wareHouse = request.MapTo<Entities.WareHouse>();
             // Validate for wareHouse
-            wareHouse!.ValidateCreate();
+            //wareHouse!.ValidateCreate();
             // Begin transaction
             using var transaction = await wareHouseRepository.BeginTransactionAsync(cancellationToken);
             try

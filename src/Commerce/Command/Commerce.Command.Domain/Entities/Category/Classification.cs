@@ -29,7 +29,7 @@ namespace Commerce.Command.Domain.Entities.Category
         /// <summary>
         /// Views of classification
         /// </summary>
-        public int? Views {  get; set; }
+        public int? Views { get; set; } = 0;
 
         /// <summary>
         /// Date when the User was created

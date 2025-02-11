@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Shop;
+using Commerce.Query.Application.UserCases.Shop;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -14,7 +15,7 @@ namespace Commerce.Query.Presentation.Service.Shop
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.SHOP_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class shopService : ApiController
     {
         private readonly IMediator mediator;
@@ -50,6 +51,19 @@ namespace Commerce.Query.Presentation.Service.Shop
         public async Task<IActionResult> GetAllShops()
         {
             var query = new GetAllShopQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllShopsPaging([FromQuery] int pageNumber)
+        {
+            var query = new GetAllShopPagingQuery(pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

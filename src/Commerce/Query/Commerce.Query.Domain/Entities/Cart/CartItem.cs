@@ -1,5 +1,6 @@
 ﻿using Commerce.Query.Contract.Validators;
 using Commerce.Query.Domain.Abstractions.Aggregates;
+using Commerce.Query.Domain.Entities.Product;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ namespace Commerce.Query.Domain.Entities.Cart
         /// <summary>
         /// ID of the Product associated with this item.
         /// </summary>
-        public Guid? ProductId { get; set; }
+        public Guid? ProductDetailId { get; set; }
 
         /// <summary>
         /// Price of the product when added to the cart.
@@ -41,6 +42,8 @@ namespace Commerce.Query.Domain.Entities.Cart
         [NotMapped]
         [JsonIgnore]
         public Cart? Cart { get; set; }
+
+        public ProductDetail? ProductDetails { get; set; }
 
         public override void Validate()
         {

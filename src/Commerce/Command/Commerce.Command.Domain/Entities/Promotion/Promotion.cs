@@ -24,7 +24,7 @@ namespace Commerce.Command.Domain.Entities.Promotion
         /// <summary>
         /// Discount type of the Promotion (e.g., Percentage, Fixed Amount)
         /// </summary>
-        public string? DiscountType { get; set; }
+        public string? DiscountCode { get; set; }
 
         /// <summary>
         /// Discount value of the Promotion
@@ -83,9 +83,7 @@ namespace Commerce.Command.Domain.Entities.Promotion
             var validator = Validator.Create(this);
             validator.RuleFor(x => x.Name).NotNull()!.NotEmpty().MaxLength(PromotionConst.NAME_MAX_LENGTH);
             validator.RuleFor(x => x.Description)!.MaxLength(PromotionConst.DESCRIPTION_MAX_LENGTH);
-            validator.RuleFor(x => x.DiscountType).NotNull()!.NotEmpty().MaxLength(PromotionConst.DISCOUNT_TYPE_MAX_LENGTH).NotVietnamese();
-            validator.RuleFor(x => x.StartDate).NotNull();
-            validator.RuleFor(x => x.EndDate).NotNull();
+            validator.RuleFor(x => x.DiscountCode).NotNull()!.NotEmpty().MaxLength(PromotionConst.DISCOUNT_TYPE_MAX_LENGTH).NotVietnamese();
             validator.Validate();
         }
 
@@ -97,9 +95,7 @@ namespace Commerce.Command.Domain.Entities.Promotion
             var validator = Validator.Create(this);
             validator.RuleFor(x => x.Name).NotNull()!.NotEmpty().MaxLength(PromotionConst.NAME_MAX_LENGTH);
             validator.RuleFor(x => x.Description)!.MaxLength(PromotionConst.DESCRIPTION_MAX_LENGTH);
-            validator.RuleFor(x => x.DiscountType).NotNull()!.NotEmpty().MaxLength(PromotionConst.DISCOUNT_TYPE_MAX_LENGTH).NotVietnamese();
-            validator.RuleFor(x => x.StartDate).NotNull();
-            validator.RuleFor(x => x.EndDate).NotNull();
+            validator.RuleFor(x => x.DiscountCode).NotNull()!.NotEmpty().MaxLength(PromotionConst.DISCOUNT_TYPE_MAX_LENGTH).NotVietnamese();
             validator.Validate();
         }
     }

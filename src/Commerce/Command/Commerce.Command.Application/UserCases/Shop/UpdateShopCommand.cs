@@ -7,6 +7,7 @@ using Commerce.Command.Contract.Validators;
 using Entities = Commerce.Command.Domain.Entities.Shop;
 using Commerce.Command.Domain.Abstractions.Repositories.Shop;
 using MediatR;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Shop
 {
@@ -27,8 +28,7 @@ namespace Commerce.Command.Application.UserCases.Shop
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
         public Guid? UserId { get; set; }
-        public Guid? PartnerId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
     }
 
     /// <summary>
@@ -37,13 +37,15 @@ namespace Commerce.Command.Application.UserCases.Shop
     public class UpdateShopCommandHandler : IRequestHandler<UpdateShopCommand, Result>
     {
         private readonly IShopRepository shopRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete shop request
         /// </summary>
-        public UpdateShopCommandHandler(IShopRepository shopRepository)
+        public UpdateShopCommandHandler(IShopRepository shopRepository, IFileService fileService)
         {
             this.shopRepository = shopRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -68,7 +70,15 @@ namespace Commerce.Command.Application.UserCases.Shop
                 }
                 // Update shop, keep original data if request is null
                 request.MapTo(shop, true);
-                shop.ValidateUpdate();
+                if (request.Image is not null)
+                {
+                    string relativePath = "shops";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(shop.Name!, request.Image, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    shop!.Image = uploadedFilePath;
+                }
+                //shop.ValidateUpdate();
                 // Mark shop as Updated state
                 shopRepository.Update(shop);
                 // Save shop to database

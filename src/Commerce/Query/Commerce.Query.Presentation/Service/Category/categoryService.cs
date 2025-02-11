@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Category;
+using Commerce.Query.Application.UserCases.Category;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -14,7 +15,7 @@ namespace Commerce.Query.Presentation.Service.Category
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.CATEGORY_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class categoryService : ApiController
     {
         private readonly IMediator mediator;
@@ -47,9 +48,22 @@ namespace Commerce.Query.Presentation.Service.Category
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
         [HttpGet]
+        public async Task<IActionResult> GetAllCategorys([FromQuery] int pageNumber)
+        {
+            var query = new GetAllCategoryQuery(pageNumber);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("name")]
         public async Task<IActionResult> GetAllCategorys()
         {
-            var query = new GetAllCategoryQuery();
+            var query = new GetAllCategorysQuery();
             var result = await mediator.Send(query);
             return Ok(result);
         }

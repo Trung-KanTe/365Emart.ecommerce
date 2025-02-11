@@ -1,8 +1,4 @@
-﻿using Commerce.Query.Contract.DependencyInjection.Extensions;
-using Commerce.Query.Contract.Validators;
-using Commerce.Query.Domain.Abstractions.Aggregates;
-using Commerce.Query.Domain.Constants.Product;
-using Commerce.Query.Domain.Constants.Promotion;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
 
 namespace Commerce.Query.Domain.Entities.Promotion
 {
@@ -24,7 +20,7 @@ namespace Commerce.Query.Domain.Entities.Promotion
         /// <summary>
         /// Discount type of the Promotion (e.g., Percentage, Fixed Amount)
         /// </summary>
-        public string? DiscountType { get; set; }
+        public string? DiscountCode { get; set; }
 
         /// <summary>
         /// Discount value of the Promotion

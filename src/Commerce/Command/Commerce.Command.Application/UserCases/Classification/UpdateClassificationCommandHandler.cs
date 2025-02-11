@@ -1,4 +1,5 @@
-﻿using Commerce.Command.Contract.Contants;
+﻿using Commerce.Command.Contract.Abstractions;
+using Commerce.Command.Contract.Contants;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Contract.Enumerations;
 using Commerce.Command.Contract.Errors;
@@ -19,8 +20,8 @@ namespace Commerce.Command.Application.UserCases.Classification
         public string? Name { get; set; }
         public string? Icon { get; set; } = null;
         public string? Style { get; set; } = null;
-        public int? Views { get; set; } = 0;
-        public bool? IsDeleted { get; set; } = false;
+        public int? Views { get; set; } 
+        public bool? IsDeleted { get; set; } 
     }
 
     /// <summary>
@@ -29,13 +30,15 @@ namespace Commerce.Command.Application.UserCases.Classification
     public class UpdateClassificationCommandHandler : IRequestHandler<UpdateClassificationCommand, Result>
     {
         private readonly IClassificationRepository classificationRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete classification request
         /// </summary>
-        public UpdateClassificationCommandHandler(IClassificationRepository classificationRepository)
+        public UpdateClassificationCommandHandler(IClassificationRepository classificationRepository, IFileService fileService)
         {
             this.classificationRepository = classificationRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -60,7 +63,15 @@ namespace Commerce.Command.Application.UserCases.Classification
                 }
                 // Update classification, keep original data if request is null
                 request.MapTo(classification, true);
-                classification.ValidateUpdate();
+                if (request.Icon is not null)
+                {
+                    string relativePath = "classifications";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(classification.Name!, request.Icon, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    classification!.Icon = uploadedFilePath;
+                }
+                //classification.ValidateUpdate();
                 // Mark classification as Updated state
                 classificationRepository.Update(classification);
                 // Save classification to database

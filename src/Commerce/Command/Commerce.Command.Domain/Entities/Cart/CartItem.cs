@@ -18,7 +18,7 @@ namespace Commerce.Command.Domain.Entities.Cart
         /// <summary>
         /// ID of the Product associated with this item.
         /// </summary>
-        public Guid? ProductId { get; set; }
+        public Guid? ProductDetailId { get; set; }
 
         /// <summary>
         /// Price of the product when added to the cart.

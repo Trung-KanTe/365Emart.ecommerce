@@ -1,6 +1,7 @@
 ﻿using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Contract.Shared;
 using Commerce.Command.Domain.Abstractions.Repositories.Cart;
+using Commerce.Command.Domain.Abstractions.Repositories.Settings;
 using Commerce.Command.Domain.Entities.Cart;
 using MediatR;
 using Entities = Commerce.Command.Domain.Entities.Cart;
@@ -12,7 +13,7 @@ namespace Commerce.Command.Application.UserCases.Cart
     /// </summary>
     public record CreateCartCommand : IRequest<Result<Entities.Cart>>
     {
-        public Guid? UserId { get; set; } 
+        public Guid? UserId { get; set; }
         public int? TotalQuantity { get; set; } = 0;  
         public bool? IsDeleted { get; set; } = false;  
         public ICollection<CartItem>? CartItems { get; set; }
@@ -24,13 +25,15 @@ namespace Commerce.Command.Application.UserCases.Cart
     public class CreateCartCommandHandler : IRequestHandler<CreateCartCommand, Result<Entities.Cart>>
     {
         private readonly ICartRepository cartRepository;
+        private readonly ISignManager signManager;
 
         /// <summary>
         /// Handler for create cart request
         /// </summary>
-        public CreateCartCommandHandler(ICartRepository cartRepository)
+        public CreateCartCommandHandler(ICartRepository cartRepository, ISignManager signManager)
         {
             this.cartRepository = cartRepository;
+            this.signManager = signManager;
         }
 
         /// <summary>
@@ -42,30 +45,54 @@ namespace Commerce.Command.Application.UserCases.Cart
         public async Task<Result<Entities.Cart>> Handle(CreateCartCommand request, CancellationToken cancellationToken)
         {
             // Create new Cart from request
-            Entities.Cart? cart = request.MapTo<Entities.Cart>();
-            // Validate for cart
-            cart!.ValidateCreate();
+            Entities.Cart? cartUser = new Entities.Cart();
+            request.MapTo(cartUser, true);
             // Begin transaction
             using var transaction = await cartRepository.BeginTransactionAsync(cancellationToken);
             try
             {
-                cart!.CartItems = request.CartItems!.Distinct().Select(ver => new Entities.CartItem
+                cartUser = await cartRepository.FindSingleAsync(x => x.UserId == request.UserId.Value, true, cancellationToken);
+                if (cartUser == null)
                 {
-                    CartId = cart.Id,
-                    ProductId = ver.ProductId,
-                    Price = ver.Price,
-                    Quantity = ver.Quantity,
-                    Total = ver.Price * ver.Quantity,
-                }).ToList();
+                    cartUser = new Entities.Cart
+                    {
+                        UserId = request.UserId.Value,
+                        CartItems = request.CartItems?.Select(ver => new Entities.CartItem
+                        {
+                            ProductDetailId = ver.ProductDetailId,
+                            Price = ver.Price,
+                            Quantity = ver.Quantity,
+                            Total = ver.Price * ver.Quantity,
+                        }).ToList() ?? new List<Entities.CartItem>()
+                    };
 
-                cart.TotalQuantity = cart.CartItems.Count;
-                // Add data
-                cartRepository.Create(cart!);
-                // Save data
-                await cartRepository.SaveChangesAsync(cancellationToken);
+                    cartUser.TotalQuantity = cartUser.CartItems.Count;
+                    // Add data
+                    cartRepository.Create(cartUser!);
+                    // Save data
+                    await cartRepository.SaveChangesAsync(cancellationToken);
+                }
+                else
+                {
+                    cartUser!.CartItems = request.CartItems!.Distinct().Select(ver => new Entities.CartItem
+                    {
+                        CartId = cartUser.Id,
+                        ProductDetailId = ver.ProductDetailId,
+                        Price = ver.Price,
+                        Quantity = ver.Quantity,
+                        Total = ver.Price * ver.Quantity,
+                    }).ToList() ?? cartUser.CartItems;
+
+                    cartUser.TotalQuantity++;
+                    // Mark cart as Updated state
+                    cartRepository.Update(cartUser);
+                    // Save data
+                    await cartRepository.SaveChangesAsync(cancellationToken);
+                }
+                          
                 // Commit transaction
                 transaction.Commit();
-                return cart;
+                return cartUser;
             }
             catch (Exception)
             {

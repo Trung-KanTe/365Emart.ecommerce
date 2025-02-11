@@ -3,6 +3,7 @@ using Commerce.Command.Domain.Abstractions.Repositories.Partner;
 using Entities = Commerce.Command.Domain.Entities.Partner;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Partner
 {
@@ -19,7 +20,7 @@ namespace Commerce.Command.Application.UserCases.Partner
         public string? Website { get; set; }
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = true;
     }
 
     /// <summary>
@@ -28,13 +29,15 @@ namespace Commerce.Command.Application.UserCases.Partner
     public class CreatePartnerCommandHandler : IRequestHandler<CreatePartnerCommand, Result<Entities.Partner>>
     {
         private readonly IPartnerRepository partnerRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for create partner request
         /// </summary>
-        public CreatePartnerCommandHandler(IPartnerRepository partnerRepository)
+        public CreatePartnerCommandHandler(IPartnerRepository partnerRepository, IFileService fileService)
         {
             this.partnerRepository = partnerRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -48,7 +51,17 @@ namespace Commerce.Command.Application.UserCases.Partner
             // Create new Partner from request
             Entities.Partner? partner = request.MapTo<Entities.Partner>();
             // Validate for partner
-            partner!.ValidateCreate();
+            //partner!.ValidateCreate();
+
+            if (request.Icon is not null)
+            {
+                string relativePath = "partners";
+                // Upload ảnh và lấy đường dẫn lưu trữ
+                string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Icon, relativePath);
+                // Cập nhật đường dẫn Icon
+                partner!.Icon = uploadedFilePath;
+            }
+
             // Begin transaction
             using var transaction = await partnerRepository.BeginTransactionAsync(cancellationToken);
             try

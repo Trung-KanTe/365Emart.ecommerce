@@ -1,5 +1,4 @@
-﻿using Commerce.Command.Contract.DependencyInjection.Extensions;
-using Commerce.Command.Domain.Abstractions.Repositories;
+﻿using Commerce.Command.Domain.Abstractions.Repositories;
 using Commerce.Command.Domain.Abstractions.Repositories.Brand;
 using Commerce.Command.Domain.Abstractions.Repositories.Cart;
 using Commerce.Command.Domain.Abstractions.Repositories.Category;
@@ -7,6 +6,7 @@ using Commerce.Command.Domain.Abstractions.Repositories.ImportProduct;
 using Commerce.Command.Domain.Abstractions.Repositories.Order;
 using Commerce.Command.Domain.Abstractions.Repositories.Partner;
 using Commerce.Command.Domain.Abstractions.Repositories.Payment;
+using Commerce.Command.Domain.Abstractions.Repositories.ProducStock;
 using Commerce.Command.Domain.Abstractions.Repositories.Product;
 using Commerce.Command.Domain.Abstractions.Repositories.Promotion;
 using Commerce.Command.Domain.Abstractions.Repositories.Settings;
@@ -79,9 +79,12 @@ namespace Commerce.Command.Persistence.DependencyInjection.Extensions
             services.AddScoped<IPasswordHasher<User>, PasswordHasher>();
             services.AddScoped<ISignManager, SignManager>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<IProductStockRepository, ProductStockRepository>();
             services.AddScoped<IWareHouseRepository, WareHouseRepository>();
             services.AddScoped<IImportProductRepository, ImportProductRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderCancelRepository, OrderCancelRepository>();

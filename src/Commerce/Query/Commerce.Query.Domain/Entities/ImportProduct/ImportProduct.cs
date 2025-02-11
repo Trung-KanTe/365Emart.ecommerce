@@ -20,11 +20,6 @@ namespace Commerce.Query.Domain.Entities.ImportProduct
         public Guid? PartnerId { get; set; }
 
         /// <summary>
-        /// Shop ID associated with the Import Product.
-        /// </summary>
-        public Guid? ShopId { get; set; }
-
-        /// <summary>
         /// Warehouse ID where the product is stored.
         /// </summary>
         public Guid? WareHouseId { get; set; }
@@ -32,7 +27,7 @@ namespace Commerce.Query.Domain.Entities.ImportProduct
         /// <summary>
         /// Date of import.
         /// </summary>
-        public DateTime? ImportDate { get; set; } = DateTime.UtcNow;
+        public DateTime? ImportDate { get; set; } 
 
         /// <summary>
         /// Note for the Import Product.

@@ -1,8 +1,6 @@
-﻿using Commerce.Query.Contract.DependencyInjection.Extensions;
-using Commerce.Query.Contract.Validators;
-using Commerce.Query.Domain.Abstractions.Aggregates;
-using Commerce.Query.Domain.Constants.Partner;
-using Commerce.Query.Domain.Constants.Product;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Commerce.Query.Domain.Entities.Product
 {
@@ -17,16 +15,6 @@ namespace Commerce.Query.Domain.Entities.Product
         /// Description of the Product
         /// </summary>
         public string? Description { get; set; }
-
-        /// <summary>
-        /// Description of the Product
-        /// </summary>
-        public string? Size { get; set; }
-
-        /// <summary>
-        /// Description of the Product
-        /// </summary>
-        public string? Color { get; set; }
 
         /// <summary>
         /// Description of the Product
@@ -82,6 +70,10 @@ namespace Commerce.Query.Domain.Entities.Product
         /// Status indicating if the Product is deleted (soft delete)
         /// </summary>
         public bool? IsDeleted { get; set; } = true;
+
+        [NotMapped]
+        [JsonIgnore]
+        public ICollection<ProductDetail>? ProductDetails { get; set; }
 
         public override void Validate()
         {

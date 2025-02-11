@@ -18,8 +18,8 @@ namespace Commerce.Command.Application.UserCases.Cart
     {
         public Guid? Id { get; set; }
         public Guid? UserId { get; set; }
-        public int? TotalQuantity { get; set; } = 0;
-        public bool? IsDeleted { get; set; } = false;
+        public int? TotalQuantity { get; set; } 
+        public bool? IsDeleted { get; set; } 
         public ICollection<CartItem>? CartItems { get; set; }
     }
 
@@ -59,17 +59,16 @@ namespace Commerce.Command.Application.UserCases.Cart
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Cart)) })));
                 }
                 // Update cart, keep original data if request is null
-                request.MapTo(cart, true);
                 cart!.CartItems = request.CartItems!.Distinct().Select(ver => new Entities.CartItem
                 {
                     CartId = cart.Id,
-                    ProductId = ver.ProductId,
+                    ProductDetailId = ver.ProductDetailId,
                     Price = ver.Price,
                     Quantity = ver.Quantity,
                     Total = ver.Price * ver.Quantity,
                 }).ToList() ?? cart.CartItems;
 
-                cart.TotalQuantity = cart.CartItems!.Count;
+                cart.TotalQuantity++;
                 // Mark cart as Updated state
                 cartRepository.Update(cart);
                 // Save cart to database

@@ -70,7 +70,7 @@ namespace Commerce.Command.Application.UserCases.Order
                 order!.OrderItems = request.OrderItems!.Select(ver => new Entities.OrderItem
                 {
                     OrderId = order.Id,
-                    ProductId = ver.ProductId,
+                    ProductDetailId = ver.ProductDetailId,
                     Price = ver.Price,
                     Quantity = ver.Quantity,
                     Total = ver.Price * ver.Quantity,

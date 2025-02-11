@@ -1,7 +1,9 @@
 ﻿using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Contract.Shared;
 using Commerce.Command.Domain.Abstractions.Repositories.ImportProduct;
+using Commerce.Command.Domain.Abstractions.Repositories.ProducStock;
 using Commerce.Command.Domain.Entities.ImportProduct;
+using Commerce.Command.Domain.Entities.ProductStock;
 using MediatR;
 using Entities = Commerce.Command.Domain.Entities.ImportProduct;
 
@@ -13,13 +15,9 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
     public record CreateImportProductCommand : IRequest<Result<Entities.ImportProduct>>
     {
         public Guid? PartnerId { get; set; }
-        public Guid? ShopId { get; set; }
         public Guid? WareHouseId { get; set; }
-        public DateTime? ImportDate { get; set; }
         public string? Note { get; set; }
-        public Guid? InsertedBy { get; set; }
-        public DateTime? InsertedAt { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public bool? IsDeleted { get; set; } = true;
         public ICollection<ImportProductDetails>? ImportProductDetails { get; set; }
     }
 
@@ -29,13 +27,15 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
     public class CreateImportProductCommandHandler : IRequestHandler<CreateImportProductCommand, Result<Entities.ImportProduct>>
     {
         private readonly IImportProductRepository importProductRepository;
+        private readonly IProductStockRepository productStockRepository;
 
         /// <summary>
         /// Handler for create importProduct request
         /// </summary>
-        public CreateImportProductCommandHandler(IImportProductRepository importProductRepository)
+        public CreateImportProductCommandHandler(IImportProductRepository importProductRepository, IProductStockRepository productStockRepository)
         {
             this.importProductRepository = importProductRepository;
+            this.productStockRepository = productStockRepository;
         }
 
         /// <summary>
@@ -60,12 +60,32 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
                     ProductId = ver.ProductId,
                     ImportPrice = ver.ImportPrice,
                     Quantity = ver.Quantity,
-                    Note = ver.Note,
                 }).ToList();
+
+                foreach (var item in importProduct.ImportProductDetails) 
+                {
+                    var stockExist = await productStockRepository.FindSingleAsync(x => x.ProductId == item.ProductId && x.WareHouseId == importProduct.WareHouseId, true, cancellationToken);
+                    if (stockExist != null)
+                    {
+                        stockExist.Quantity += item.Quantity;
+                        productStockRepository.Update(stockExist);
+                    }
+                    else
+                    {
+                        var stock = new ProductStock
+                        {
+                            ProductId = item.ProductId,
+                            WareHouseId = importProduct.WareHouseId,
+                            Quantity = item.Quantity,
+                        };
+                        productStockRepository.Create(stock);
+                    }                       
+                }
                 // Add data
                 importProductRepository.Create(importProduct!);
                 // Save data
                 await importProductRepository.SaveChangesAsync(cancellationToken);
+                await productStockRepository.SaveChangesAsync(cancellationToken);               
                 // Commit transaction
                 transaction.Commit();
                 return importProduct;

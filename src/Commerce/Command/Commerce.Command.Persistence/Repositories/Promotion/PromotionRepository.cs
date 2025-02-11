@@ -23,7 +23,8 @@ namespace Commerce.Command.Persistence.Repositories.Promotion
         {
             entity.InsertedAt = DateTime.UtcNow;
             entity.InsertedBy = signManager.CurrentUser.Id;
-            entity.StartDate = DateTime.UtcNow;
+            //entity.StartDate = DateTime.UtcNow;
+            //entity.EndDate = DateTime.UtcNow.AddMonths(1);
             if (entity.Id == Guid.Empty) entity.Id = Guid.NewGuid();
             Entities.Add(entity);
         }

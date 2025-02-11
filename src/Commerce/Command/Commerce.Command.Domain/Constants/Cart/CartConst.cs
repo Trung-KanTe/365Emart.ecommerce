@@ -20,7 +20,7 @@ namespace Commerce.Command.Domain.Constants.Cart
         // Fields for CartItems
         public const string FIELD_CART_ITEM_ID = "ci_Id";
         public const string FIELD_CART_ITEM_CART_ID = "ci_CartId";
-        public const string FIELD_CART_ITEM_PRODUCT_ID = "ci_ProductId";
+        public const string FIELD_CART_ITEM_PRODUCT_ID = "ci_ProductDetailId";
         public const string FIELD_CART_ITEM_PRICE = "ci_Price";
         public const string FIELD_CART_ITEM_QUANTITY = "ci_Quantity";
         public const string FIELD_CART_ITEM_TOTAL = "ci_Total";

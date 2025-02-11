@@ -3,6 +3,7 @@ using Commerce.Command.Domain.Abstractions.Repositories.Shop;
 using Entities = Commerce.Command.Domain.Entities.Shop;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Shop
 {
@@ -18,12 +19,11 @@ namespace Commerce.Command.Application.UserCases.Shop
         public string? Tel { get; set; }
         public string? Email { get; set; }
         public string? Website { get; set; }
-        public int Views { get; set; }
+        public int Views { get; set; } = 0;
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
         public Guid? UserId { get; set; }
-        public Guid? PartnerId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = true;
     }
 
     /// <summary>
@@ -32,13 +32,15 @@ namespace Commerce.Command.Application.UserCases.Shop
     public class CreateShopCommandHandler : IRequestHandler<CreateShopCommand, Result<Entities.Shop>>
     {
         private readonly IShopRepository shopRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for create shop request
         /// </summary>
-        public CreateShopCommandHandler(IShopRepository shopRepository)
+        public CreateShopCommandHandler(IShopRepository shopRepository, IFileService fileService)
         {
             this.shopRepository = shopRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -52,7 +54,17 @@ namespace Commerce.Command.Application.UserCases.Shop
             // Create new Shop from request
             Entities.Shop? shop = request.MapTo<Entities.Shop>();
             // Validate for shop
-            shop!.ValidateCreate();
+            //shop!.ValidateCreate();
+
+            if (request.Image is not null)
+            {
+                string relativePath = "shops";
+                // Upload ảnh và lấy đường dẫn lưu trữ
+                string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Image, relativePath);
+                // Cập nhật đường dẫn Icon
+                shop!.Image = uploadedFilePath;
+            }
+
             // Begin transaction
             using var transaction = await shopRepository.BeginTransactionAsync(cancellationToken);
             try

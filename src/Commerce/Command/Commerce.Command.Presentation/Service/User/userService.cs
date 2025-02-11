@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.User
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.USER_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class userService : ApiController
     {
         private readonly IMediator mediator;

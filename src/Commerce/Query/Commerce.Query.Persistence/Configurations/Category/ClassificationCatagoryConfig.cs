@@ -15,6 +15,7 @@ namespace Commerce.Query.Persistence.Configurations.Category
             builder.ToTable(CategoryConst.TABLE_CLASSIFICATION_CATEGORY);
             builder.Property(x => x.CategoryId).HasColumnName(CategoryConst.FIELD_CATEGORY_ID);
             builder.Property(x => x.ClassificationId).HasColumnName(CategoryConst.FIELD_CLASSIFICATION_ID);
+            builder.Ignore(x => x.Id);
             builder.HasKey(x => new
             {
                 x.CategoryId,

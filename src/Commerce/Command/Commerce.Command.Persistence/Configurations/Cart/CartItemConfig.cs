@@ -19,7 +19,7 @@ namespace Commerce.Command.Persistence.Configurations.Cart
                 .HasColumnName(CartConst.FIELD_CART_ITEM_CART_ID)
                 .IsRequired();
 
-            builder.Property(x => x.ProductId)
+            builder.Property(x => x.ProductDetailId)
                 .HasColumnName(CartConst.FIELD_CART_ITEM_PRODUCT_ID)
                 .IsRequired();
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Commerce.Query.Domain.Entities.Category
@@ -6,7 +7,7 @@ namespace Commerce.Query.Domain.Entities.Category
     /// <summary>
     /// Domain entity with int key type
     /// </summary
-    public class ClassificationCategory 
+    public class ClassificationCategory : AggregateRoot<Guid>
     {
         /// <summary>
         /// Category Id of ClassificationCategory
@@ -24,5 +25,9 @@ namespace Commerce.Query.Domain.Entities.Category
         [NotMapped]
         [JsonIgnore]
         public Category? Category { get; set; }
+
+        public override void Validate()
+        {
+        }
     }
 }

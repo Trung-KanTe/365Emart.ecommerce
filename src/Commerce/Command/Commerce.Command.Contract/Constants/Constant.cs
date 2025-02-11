@@ -50,6 +50,7 @@
         public const string NOT_NULL_OR_WHITE_SPACE = $"{Args.PROPERTY_NAME} must not be null or whitespaces.";
         public const string PROPERTY_ALREADY_EXIST = $"{Args.PROPERTY_NAME} already exist";
         public const string MSG_LOGIN = "Email or Password was not correct";
+        public const string MSG_CONFLICT = $"Conflict data in the {Args.PROPERTY_NAME}";
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.User;
+using Commerce.Query.Contract.Shared;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -47,10 +48,12 @@ namespace Commerce.Query.Presentation.Service.User
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber)
         {
-            var query = new GetAllUserQuery();
+            // Tạo query phân trang
+            var query = new GetAllUserQuery(pageNumber);
             var result = await mediator.Send(query);
+
             return Ok(result);
         }
     }

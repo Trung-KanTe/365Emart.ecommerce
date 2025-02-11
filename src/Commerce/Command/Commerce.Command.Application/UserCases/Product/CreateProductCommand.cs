@@ -3,6 +3,8 @@ using Commerce.Command.Domain.Abstractions.Repositories.Product;
 using Entities = Commerce.Command.Domain.Entities.Product;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
+using Commerce.Command.Domain.Entities.Product;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Product
 {
@@ -13,8 +15,6 @@ namespace Commerce.Command.Application.UserCases.Product
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Size { get; set; }
-        public string? Color { get; set; }
         public int? Views { get; set; } = 0;
         public decimal? Price { get; set; }
         public Guid? CategoryId { get; set; }
@@ -22,6 +22,7 @@ namespace Commerce.Command.Application.UserCases.Product
         public Guid? ShopId { get; set; }
         public string? Image { get; set; }
         public bool? IsDeleted { get; set; } = true;
+        public ICollection<ProductDetail>? ProductDetails { get; set; }
     }
 
     /// <summary>
@@ -30,13 +31,15 @@ namespace Commerce.Command.Application.UserCases.Product
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<Entities.Product>>
     {
         private readonly IProductRepository productRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for create product request
         /// </summary>
-        public CreateProductCommandHandler(IProductRepository productRepository)
+        public CreateProductCommandHandler(IProductRepository productRepository, IFileService fileService)
         {
             this.productRepository = productRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -50,11 +53,26 @@ namespace Commerce.Command.Application.UserCases.Product
             // Create new Product from request
             Entities.Product? product = request.MapTo<Entities.Product>();
             // Validate for product
-            product!.ValidateCreate();
+            if (request.Image is not null)
+            {
+                string relativePath = "products";
+                // Upload ảnh và lấy đường dẫn lưu trữ
+                string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Image, relativePath);
+                // Cập nhật đường dẫn Icon
+                product!.Image = uploadedFilePath;
+            }
+            //product!.ValidateCreate();
             // Begin transaction
             using var transaction = await productRepository.BeginTransactionAsync(cancellationToken);
             try
             {
+                product!.ProductDetails = request.ProductDetails!.Select(ver => new ProductDetail
+                {
+                    ProductId = product.Id,
+                    Size = ver.Size,
+                    StockQuantity = 0,
+                    Color = ver.Color,
+                }).ToList();
                 // Add data
                 productRepository.Create(product!);
                 // Save data

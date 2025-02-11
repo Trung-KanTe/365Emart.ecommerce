@@ -7,6 +7,8 @@ using Commerce.Command.Contract.Validators;
 using Entities = Commerce.Command.Domain.Entities.Product;
 using Commerce.Command.Domain.Abstractions.Repositories.Product;
 using MediatR;
+using Commerce.Command.Domain.Entities.Product;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Product
 {
@@ -18,15 +20,14 @@ namespace Commerce.Command.Application.UserCases.Product
         public Guid? Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? Size { get; set; }
-        public string? Color { get; set; }
-        public int? Views { get; set; } = 0;
+        public int? Views { get; set; } 
         public decimal? Price { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? BrandId { get; set; }
         public Guid? ShopId { get; set; }
         public string? Image { get; set; }
-        public bool? IsDeleted { get; set; } = true;
+        public bool? IsDeleted { get; set; }
+        public ICollection<ProductDetail>? ProductDetails { get; set; }
     }
 
     /// <summary>
@@ -35,13 +36,17 @@ namespace Commerce.Command.Application.UserCases.Product
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result>
     {
         private readonly IProductRepository productRepository;
+        private readonly IProductDetailRepository productDetailRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete product request
         /// </summary>
-        public UpdateProductCommandHandler(IProductRepository productRepository)
+        public UpdateProductCommandHandler(IProductRepository productRepository, IProductDetailRepository productDetailRepository, IFileService fileService)
         {
             this.productRepository = productRepository;
+            this.productDetailRepository = productDetailRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -59,14 +64,33 @@ namespace Commerce.Command.Application.UserCases.Product
             try
             {
                 // Need tracking to delete product
-                var product = await productRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);
+                var product = await productRepository.FindByIdAsync(request.Id.Value, true, cancellationToken, includeProperties: x=>x.ProductDetails!);
                 if (product == null)
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Product)) })));
                 }
                 // Update product, keep original data if request is null
                 request.MapTo(product, true);
-                product.ValidateUpdate();
+                if (request.Image is not null)
+                {
+                    string relativePath = "products";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(product.Name!, request.Image, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    product!.Image = uploadedFilePath;
+                }
+                //product.ValidateUpdate();
+                if (request.ProductDetails is not null)
+                {
+                    product!.ProductDetails = request.ProductDetails!.Select(ver => new ProductDetail
+                    {
+                        ProductId = product.Id,
+                        Size = ver.Size,
+                        StockQuantity = ver.StockQuantity ?? 0,
+                        Color = ver.Color,
+                    }).ToList();
+                }    
+               
                 // Mark product as Updated state
                 productRepository.Update(product);
                 // Save product to database

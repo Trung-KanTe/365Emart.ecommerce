@@ -23,6 +23,19 @@ namespace Commerce.Command.Persistence.Configurations.Payment
                 .HasColumnName(PaymentConst.FIELD_PAYMENT_AMOUNT)
                 .IsRequired();
 
+            builder.Property(x => x.BankCode)
+               .HasColumnName(PaymentConst.FIELD_PAYMENT_DETAILS_TRANSACTION_CODE)
+               .HasMaxLength(PaymentConst.PAYMENT_DETAILS_TRANSACTION_CODE_MAX_LENGTH)
+               .IsRequired();
+
+            builder.Property(x => x.BankName)
+                .HasColumnName(PaymentConst.FIELD_PAYMENT_DETAILS_BANK_NAME)
+                .HasMaxLength(PaymentConst.PAYMENT_DETAILS_BANK_NAME_MAX_LENGTH);
+
+            builder.Property(x => x.CardNumber)
+                .HasColumnName(PaymentConst.FIELD_PAYMENT_DETAILS_CARD_NUMBER)
+                .HasMaxLength(PaymentConst.PAYMENT_DETAILS_CARD_NUMBER_MAX_LENGTH);
+
             builder.Property(x => x.ReturnUrl)
                 .HasColumnName(PaymentConst.FIELD_PAYMENT_URL)
                 .IsRequired();
@@ -73,7 +86,7 @@ namespace Commerce.Command.Persistence.Configurations.Payment
                 .IsRequired();
 
             builder.ToTable(PaymentConst.TABLE_PAYMENT);
-            builder.HasMany(c => c.PaymentDetails).WithOne(verify => verify.Payment).HasForeignKey(mer => mer.PaymentId).OnDelete(DeleteBehavior.Cascade);
+            //builder.HasMany(c => c.PaymentDetails).WithOne(verify => verify.Payment).HasForeignKey(mer => mer.PaymentId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

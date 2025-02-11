@@ -6,7 +6,7 @@
         public const string FIELD_ID = "prm_Id";
         public const string FIELD_NAME = "prm_Name";
         public const string FIELD_DESCRIPTION = "prm_Description";
-        public const string FIELD_DISCOUNT_TYPE = "prm_DiscountType";
+        public const string FIELD_DISCOUNT_TYPE = "prm_DiscountCode";
         public const string FIELD_DISCOUNT_VALUE = "prm_DiscountValue";
         public const string FIELD_START_DATE = "prm_StartDate";
         public const string FIELD_END_DATE = "prm_EndDate";

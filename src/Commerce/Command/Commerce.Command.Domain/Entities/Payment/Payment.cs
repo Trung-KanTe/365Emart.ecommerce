@@ -31,7 +31,7 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// <summary>
         /// Transaction ID for the Payment.
         /// </summary>
-        public string? TransactionId { get; set; }
+        public long? TransactionId { get; set; }
 
         /// <summary>
         /// Payment method used for the Payment.
@@ -62,6 +62,18 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// Date when the Payment was made.
         /// </summary>
         public string? ResponseCode { get; set; }
+
+        public long? BankCode { get; set; }
+
+        /// <summary>
+        /// Bank name associated with the payment.
+        /// </summary>
+        public string? BankName { get; set; }
+
+        /// <summary>
+        /// Card number used in the payment.
+        /// </summary>
+        public string? CardNumber { get; set; }
 
         /// <summary>
         /// Status of the Payment.
@@ -96,9 +108,9 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// <summary>
         /// Collection of payment details associated with this Payment.
         /// </summary>
-        [NotMapped]
-        [JsonIgnore]
-        public ICollection<PaymentDetails>? PaymentDetails { get; set; }
+        //[NotMapped]
+        //[JsonIgnore]
+        //public ICollection<PaymentDetails>? PaymentDetails { get; set; }
 
         /// <summary>
         /// Implement the Validate method from Entity<Guid>
@@ -114,21 +126,20 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// </summary>
         public void ValidateCreate()
         {
-            var validator = Validator.Create(this);
-            validator.RuleFor(x => x.OrderId)
-                .NotNull()
-                .IsGuid();
-            validator.RuleFor(x => x.TransactionId)!
-                .MaxLength(PaymentConst.PAYMENT_TRANSACTION_ID_MAX_LENGTH);
+            //var validator = Validator.Create(this);
+            //validator.RuleFor(x => x.OrderId)
+            //    .NotNull()
+            //    .IsGuid();
+           
 
 
-            validator.RuleFor(x => x.PaymentMethod)
-                .MaxLength(PaymentConst.PAYMENT_METHOD_MAX_LENGTH);
+            //validator.RuleFor(x => x.PaymentMethod)
+            //    .MaxLength(PaymentConst.PAYMENT_METHOD_MAX_LENGTH);
 
 
-            validator.RuleFor(x => x.PaymentStatus)
-                .MaxLength(PaymentConst.PAYMENT_STATUS_MAX_LENGTH);
-            validator.Validate();
+            //validator.RuleFor(x => x.PaymentStatus)
+            //    .MaxLength(PaymentConst.PAYMENT_STATUS_MAX_LENGTH);
+            //validator.Validate();
         }
 
         /// <summary>
@@ -136,21 +147,20 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// </summary>
         public void ValidateUpdate()
         {
-            var validator = Validator.Create(this);
-            validator.RuleFor(x => x.OrderId)
-                .NotNull()
-                .IsGuid();
-            validator.RuleFor(x => x.TransactionId)!
-                .MaxLength(PaymentConst.PAYMENT_TRANSACTION_ID_MAX_LENGTH);
+            //var validator = Validator.Create(this);
+            //validator.RuleFor(x => x.OrderId)
+            //    .NotNull()
+            //    .IsGuid();
+           
 
 
-            validator.RuleFor(x => x.PaymentMethod)
-                .MaxLength(PaymentConst.PAYMENT_METHOD_MAX_LENGTH);
+            //validator.RuleFor(x => x.PaymentMethod)
+            //    .MaxLength(PaymentConst.PAYMENT_METHOD_MAX_LENGTH);
 
 
-            validator.RuleFor(x => x.PaymentStatus)
-                .MaxLength(PaymentConst.PAYMENT_STATUS_MAX_LENGTH);
-            validator.Validate();
+            //validator.RuleFor(x => x.PaymentStatus)
+            //    .MaxLength(PaymentConst.PAYMENT_STATUS_MAX_LENGTH);
+            //validator.Validate();
         }
     }
 }

@@ -54,9 +54,6 @@ namespace Commerce.Query.Persistence.Configurations.Shop
             builder.Property(x => x.UserId)
                 .HasColumnName(ShopConst.FIELD_SHOP_USER_ID);
 
-            builder.Property(x => x.PartnerId)
-                .HasColumnName(ShopConst.FIELD_SHOP_PARTNER_ID);
-
             builder.Property(x => x.Views)
                 .HasColumnName(ShopConst.FIELD_SHOP_VIEWS);
 

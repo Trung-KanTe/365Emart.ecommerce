@@ -40,10 +40,10 @@ namespace Commerce.Command.Persistence.Configurations.Payment
                 .HasColumnName(PaymentConst.FIELD_PAYMENT_DETAILS_EXTRA_DATA);
 
             builder.ToTable(PaymentConst.TABLE_PAYMENT_DETAILS);
-            builder.HasOne(mer => mer.Payment)
-                   .WithMany(ver => ver.PaymentDetails)
-                   .HasForeignKey(mer => mer.PaymentId)
-                   .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(mer => mer.Payment)
+            //       .WithMany(ver => ver.PaymentDetails)
+            //       .HasForeignKey(mer => mer.PaymentId)
+            //       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

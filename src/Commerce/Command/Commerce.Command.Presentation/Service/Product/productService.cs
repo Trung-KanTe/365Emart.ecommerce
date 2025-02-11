@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Commerce.Command.Application.UserCases.DTOs;
 using Commerce.Command.Application.UserCases.Product;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Presentation.Abstractions;
@@ -7,6 +8,7 @@ using Commerce.Command.Presentation.DTOs.Product;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Commerce.Command.Presentation.Service.Product
 {
@@ -16,7 +18,7 @@ namespace Commerce.Command.Presentation.Service.Product
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.PRODUCT_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class productService : ApiController
     {
         private readonly IMediator mediator;
@@ -70,6 +72,34 @@ namespace Commerce.Command.Presentation.Service.Product
                 Id = id
             };
             var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for create product
+        /// </summary>
+        /// <param name="command">Request to create product</param>
+        /// <returns>Action result</returns>
+        [HttpPut("view")]
+        public async Task<IActionResult> UpdateProductView(Guid? id)
+        {
+            var command = new UpdateProductViewCommand
+            {
+                Id = id
+            };
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for create product
+        /// </summary>
+        /// <param name="command">Request to create product</param>
+        /// <returns>Action result</returns>
+        [HttpPut("stockQuantity")]
+        public async Task<IActionResult> UpdateQuantityproductDetail([FromBody] UpdateQuantityProductDetailCommand request)
+        {
+            var result = await mediator.Send(request);
             return Ok(result);
         }
     }

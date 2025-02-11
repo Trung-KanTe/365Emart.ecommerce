@@ -19,7 +19,7 @@ namespace Commerce.Query.Persistence.Configurations.Order
                 .HasColumnName(OrderConst.FIELD_ORDER_ITEM_ORDER_ID)
                 .IsRequired();
 
-            builder.Property(x => x.ProductId)
+            builder.Property(x => x.ProductDetailId)
                 .HasColumnName(OrderConst.FIELD_ORDER_ITEM_PRODUCT_ID)
                 .IsRequired();
 

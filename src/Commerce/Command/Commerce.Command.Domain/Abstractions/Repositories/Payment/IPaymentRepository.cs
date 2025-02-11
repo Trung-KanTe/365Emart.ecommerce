@@ -7,5 +7,6 @@ namespace Commerce.Command.Domain.Abstractions.Repositories.Payment
     /// </summary>
     public interface IPaymentRepository : IGenericRepository<Entity.Payment, Guid>
     {
+        Task<Entity.Payment> GetByBankCodeAsync(long bankCode);
     }
 }

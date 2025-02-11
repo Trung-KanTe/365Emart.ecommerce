@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Brand
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.BRAND_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class brandService : ApiController
     {
         private readonly IMediator mediator;
@@ -32,7 +32,7 @@ namespace Commerce.Command.Presentation.Service.Brand
         /// <param name="command">Request to create brand</param>
         /// <returns>Action result</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateBrand(CreateBrandCommandHandler command)
+        public async Task<IActionResult> CreateBrand(CreateBrandCommand command)
         {
             var result = await mediator.Send(command);
             return Ok(result);

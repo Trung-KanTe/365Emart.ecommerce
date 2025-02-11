@@ -24,10 +24,7 @@ namespace Commerce.Command.Persistence.Configurations.Product
                 .HasMaxLength(ProductConst.PRODUCT_NAME_MAX_LENGTH)
                 .IsRequired();
 
-            builder.Property(x => x.Size)
-                .HasColumnName(ProductConst.FIELD_PRODUCT_SIZE);
-            builder.Property(x => x.Color)
-                .HasColumnName(ProductConst.FIELD_PRODUCT_COLOR);
+
             builder.Property(x => x.Views)
                 .HasColumnName(ProductConst.FIELD_PRODUCT_VIEW);
 
@@ -87,6 +84,10 @@ namespace Commerce.Command.Persistence.Configurations.Product
 
             // Thiết lập tên bảng
             builder.ToTable(ProductConst.TABLE_PRODUCT);
+            builder.HasMany(o => o.ProductDetails)
+                   .WithOne(oi => oi.Product)
+                   .HasForeignKey(oi => oi.ProductId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

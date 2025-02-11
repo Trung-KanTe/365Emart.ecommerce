@@ -4,6 +4,7 @@
     {
         public const string TABLE_IMPORT_PRODUCT = "ImportProduct";
         public const string TABLE_IMPORT_PRODUCT_DETAILS = "ImportProductDetails";
+        public const string TABLE_PRODUCT_STOCK = "ProductStock";
 
         public const string FIELD_IMPORT_PRODUCT_ID = "ip_Id";
         public const string FIELD_IMPORT_PRODUCT_PARTNER_ID = "ip_PartnerId";
@@ -23,6 +24,12 @@
         public const string FIELD_IMPORT_PRODUCT_DETAILS_IMPORT_PRICE = "ipd_ImportPrice";
         public const string FIELD_IMPORT_PRODUCT_DETAILS_QUANTITY = "ipd_Quantity";
         public const string FIELD_IMPORT_PRODUCT_DETAILS_NOTE = "ipd_Note";
+
+       
+        public const string FIELD_PRODUCT_STOCK_ID = "ps_Id";
+        public const string FIELD_PRODUCT_STOCK_PRODUCT_ID = "ps_ProductId";
+        public const string FIELD_PRODUCT_STOCK_QUANTITY = "ps_Quantity";
+        public const string FIELD_PRODUCT_STOCK_WAREHOUSE_ID = "ps_WareHouseId";
 
         public const int IMPORT_PRODUCT_NOTE_MAX_LENGTH = 256;
         public const int IMPORT_PRODUCT_DETAILS_NOTE_MAX_LENGTH = 256;

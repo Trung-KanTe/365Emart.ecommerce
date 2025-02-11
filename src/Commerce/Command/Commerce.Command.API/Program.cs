@@ -50,9 +50,9 @@ builder.Services.AddJWT(builder.Configuration);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
-        builder.AllowAnyOrigin()  // Cho phép m?i ngu?n g?c
-               .AllowAnyMethod()  // Cho phép m?i ph??ng th?c HTTP
-               .AllowAnyHeader()); // Cho phép m?i header
+        builder.AllowAnyOrigin() 
+               .AllowAnyMethod()  
+               .AllowAnyHeader()); 
 });
 var app = builder.Build();
 

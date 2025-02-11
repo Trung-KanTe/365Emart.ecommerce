@@ -4,6 +4,7 @@ using Entities = Commerce.Command.Domain.Entities.Category;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Domain.Entities.Category;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.CategoryCases.Category
 {
@@ -13,11 +14,11 @@ namespace Commerce.Command.Application.CategoryCases.Category
     public record CreateCategoryCommand : IRequest<Result<Entities.Category>>
     {
         public string? Name { get; set; }
-        public string? Image { get; set; } = null;
-        public string? Style { get; set; } = null;
+        public string? Image { get; set; } 
+        public string? Style { get; set; } 
         public Guid? UserId { get; set; }
         public int? Views { get; set; } = 0;
-        public bool? IsDeleted { get; set; } = false;
+        public bool? IsDeleted { get; set; } = true;
         public List<Guid>? ClassificationIds { get; set; }
     }
 
@@ -27,13 +28,15 @@ namespace Commerce.Command.Application.CategoryCases.Category
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<Entities.Category>>
     {
         private readonly ICategoryRepository categoryRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for create category request
         /// </summary>
-        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository)
+        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IFileService fileService)
         {
             this.categoryRepository = categoryRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -46,8 +49,16 @@ namespace Commerce.Command.Application.CategoryCases.Category
         {
             // Create new Category from request
             Entities.Category? category = request.MapTo<Entities.Category>();
-            // Validate for category
-            category!.ValidateCreate();
+
+            if (request.Image is not null)
+            {
+                string relativePath = "categories";
+                // Upload ảnh và lấy đường dẫn lưu trữ
+                string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Image, relativePath);
+                // Cập nhật đường dẫn Icon
+                category!.Image = uploadedFilePath;
+            }
+
             // Begin transaction
             using var transaction = await categoryRepository.BeginTransactionAsync(cancellationToken);
             try

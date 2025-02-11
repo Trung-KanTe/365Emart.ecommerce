@@ -19,7 +19,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
         public string? Name { get; set; }
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
                 }
                 // Update wareHouse, keep original data if request is null
                 request.MapTo(wareHouse, true);
-                wareHouse.ValidateUpdate();
+               // wareHouse.ValidateUpdate();
                 // Mark wareHouse as Updated state
                 wareHouseRepository.Update(wareHouse);
                 // Save wareHouse to database

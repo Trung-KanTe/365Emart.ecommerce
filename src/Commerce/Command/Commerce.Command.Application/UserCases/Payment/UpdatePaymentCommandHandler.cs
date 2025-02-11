@@ -68,15 +68,15 @@ namespace Commerce.Command.Application.UserCases.Payment
                 // Update payment, keep original data if request is null
                 request.MapTo(payment, true);
                 request.MapTo(payment, true);
-                payment!.PaymentDetails = request.PaymentDetails?.Distinct().Select(detail => new Entities.PaymentDetails
-                {
-                    PaymentId = payment.Id,
-                    BankCode = detail.BankCode,
-                    BankName = detail.BankName,
-                    CardNumber = detail.CardNumber,
-                    Note = detail.Note,
-                    ExtraData = detail.ExtraData,
-                }).ToList() ?? payment.PaymentDetails;
+                //payment!.PaymentDetails = request.PaymentDetails?.Distinct().Select(detail => new Entities.PaymentDetails
+                //{
+                //    PaymentId = payment.Id,
+                //    BankCode = detail.BankCode,
+                //    BankName = detail.BankName,
+                //    CardNumber = detail.CardNumber,
+                //    Note = detail.Note,
+                //    ExtraData = detail.ExtraData,
+                //}).ToList() ?? payment.PaymentDetails;
                 // Mark payment as Updated state
                 paymentRepository.Update(payment);
                 // Save payment to database

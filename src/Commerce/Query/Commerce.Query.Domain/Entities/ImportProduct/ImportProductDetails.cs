@@ -30,11 +30,6 @@ namespace Commerce.Query.Domain.Entities.ImportProduct
         public int? Quantity { get; set; }
 
         /// <summary>
-        /// Note for the detail.
-        /// </summary>
-        public string? Note { get; set; }
-
-        /// <summary>
         /// Navigation property to the Import Product.
         /// </summary>
         [NotMapped]

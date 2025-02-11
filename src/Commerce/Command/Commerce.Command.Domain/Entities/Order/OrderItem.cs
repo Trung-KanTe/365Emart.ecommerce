@@ -18,7 +18,7 @@ namespace Commerce.Command.Domain.Entities.Order
         /// <summary>
         /// Product ID associated with the OrderItem.
         /// </summary>
-        public Guid? ProductId { get; set; }
+        public Guid? ProductDetailId { get; set; }
 
         /// <summary>
         /// Quantity of the product in the OrderItem.

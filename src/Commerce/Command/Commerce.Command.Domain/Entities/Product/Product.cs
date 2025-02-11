@@ -3,6 +3,8 @@ using Commerce.Command.Contract.Validators;
 using Commerce.Command.Domain.Abstractions.Aggregates;
 using Commerce.Command.Domain.Constants.Partner;
 using Commerce.Command.Domain.Constants.Product;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Commerce.Command.Domain.Entities.Product
 {
@@ -17,16 +19,6 @@ namespace Commerce.Command.Domain.Entities.Product
         /// Description of the Product
         /// </summary>
         public string? Description { get; set; }
-
-        /// <summary>
-        /// Description of the Product
-        /// </summary>
-        public string? Size { get; set; }
-
-        /// <summary>
-        /// Description of the Product
-        /// </summary>
-        public string? Color { get; set; }
 
         /// <summary>
         /// Description of the Product
@@ -82,6 +74,10 @@ namespace Commerce.Command.Domain.Entities.Product
         /// Status indicating if the Product is deleted (soft delete)
         /// </summary>
         public bool? IsDeleted { get; set; } = true;
+
+        [NotMapped]
+        [JsonIgnore]
+        public ICollection<ProductDetail>? ProductDetails { get; set; }
 
         /// <summary>
         /// Implement the Validate method from Entity<Guid>

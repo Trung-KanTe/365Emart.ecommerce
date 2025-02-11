@@ -27,9 +27,9 @@
         // PaymentDetails Table Fields
         public const string FIELD_PAYMENT_DETAILS_ID = "pd_Id";
         public const string FIELD_PAYMENT_DETAILS_PAYMENT_ID = "pd_PaymentId";
-        public const string FIELD_PAYMENT_DETAILS_TRANSACTION_CODE = "pd_BankCode";
-        public const string FIELD_PAYMENT_DETAILS_BANK_NAME = "pd_BankName";
-        public const string FIELD_PAYMENT_DETAILS_CARD_NUMBER = "pd_CardNumber";
+        public const string FIELD_PAYMENT_DETAILS_TRANSACTION_CODE = "pay_BankCode";
+        public const string FIELD_PAYMENT_DETAILS_BANK_NAME = "pay_BankName";
+        public const string FIELD_PAYMENT_DETAILS_CARD_NUMBER = "pay_CardNumber";
         public const string FIELD_PAYMENT_DETAILS_NOTE = "pd_Note";
         public const string FIELD_PAYMENT_DETAILS_EXTRA_DATA = "pd_ExtraData";
 

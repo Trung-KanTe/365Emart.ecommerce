@@ -14,7 +14,7 @@ namespace Commerce.Query.Presentation.Service.Cart
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.CART_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class cartService : ApiController
     {
         private readonly IMediator mediator;
@@ -27,15 +27,16 @@ namespace Commerce.Query.Presentation.Service.Cart
         /// <summary>
         /// Api version 1 for get sample by id
         /// </summary>
-        /// <param name="id">ID of sample</param>
+        /// <param name="userId">ID of sample</param>
         /// <returns>Action result with sample as data</returns>
         [MapToApiVersion(1)]
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetCartById(Guid? id)
+        [HttpGet("{userId:guid}")]
+        public async Task<IActionResult> GetCartById(Guid? userId)
         {
+            Console.WriteLine($"GetCartById - UserId: {userId}");
             var query = new GetCartByIdQuery
             {
-                Id = id
+                UserId = userId
             };
             var result = await mediator.Send(query);
             return Ok(result);

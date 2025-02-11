@@ -85,9 +85,7 @@ namespace Commerce.Command.Domain.Entities.Order
         {
             var validator = Validator.Create(this);
             validator.RuleFor(x => x.UserId).NotNull().IsGuid();
-            validator.RuleFor(x => x.PromotionId).IsGuid();
-            validator.RuleFor(x => x.PaymentMethod).NotNull()!.NotEmpty().MaxLength(OrderConst.ORDER_PAYMENT_METHOD_MAX_LENGTH);
-            validator.RuleFor(x => x.Status).NotNull()!.NotEmpty().MaxLength(OrderConst.ORDER_STATUS_MAX_LENGTH);
+            validator.RuleFor(x => x.PromotionId).IsGuid();          
             validator.Validate();
         }
 

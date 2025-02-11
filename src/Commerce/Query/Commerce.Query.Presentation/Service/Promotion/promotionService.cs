@@ -3,7 +3,6 @@ using Commerce.Query.Application.UserCases.Promotion;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Query.Presentation.Service.Promotion
@@ -14,7 +13,7 @@ namespace Commerce.Query.Presentation.Service.Promotion
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.PROMOTION_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class promotionService : ApiController
     {
         private readonly IMediator mediator;
@@ -42,6 +41,23 @@ namespace Commerce.Query.Presentation.Service.Promotion
         }
 
         /// <summary>
+        /// Api version 1 for get sample by id
+        /// </summary>
+        /// <param name="id">ID of sample</param>
+        /// <returns>Action result with sample as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("{discountCode}")]
+        public async Task<IActionResult> GetPromotionByDiscountCode(string? discountCode)
+        {
+            var query = new GetPromotionByDiscountCodeQuery
+            {
+                DiscountCode = discountCode
+            };
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Api version 1 for get all samples
         /// </summary>
         /// <returns>Action result with list of samples as data</returns>
@@ -50,6 +66,19 @@ namespace Commerce.Query.Presentation.Service.Promotion
         public async Task<IActionResult> GetAllPromotions()
         {
             var query = new GetAllPromotionQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPromotionsPaging([FromQuery] int pageNumber)
+        {
+            var query = new GetAllPromotionPagingQuery(pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

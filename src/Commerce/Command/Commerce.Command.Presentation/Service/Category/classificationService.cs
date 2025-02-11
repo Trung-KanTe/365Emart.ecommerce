@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Category
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.CLASSIFICATION_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class classificationService : ApiController
     {
         private readonly IMediator mediator;

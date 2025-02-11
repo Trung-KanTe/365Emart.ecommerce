@@ -14,7 +14,6 @@
         public const string FIELD_SHOP_ADDRESS = "sh_Address";
         public const string FIELD_SHOP_WARD_ID = "sh_WardId";
         public const string FIELD_SHOP_USER_ID = "sh_UserId";
-        public const string FIELD_SHOP_PARTNER_ID = "sh_PartnerId";
         public const string FIELD_SHOP_VIEWS = "sh_Views";
         public const string FIELD_SHOP_INSERTED_AT = "sh_InsertedAt";
         public const string FIELD_SHOP_INSERTED_BY = "sh_InsertedBy";

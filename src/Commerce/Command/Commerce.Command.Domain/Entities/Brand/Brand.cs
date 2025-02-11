@@ -34,7 +34,7 @@ namespace Commerce.Command.Domain.Entities.Brand
         /// <summary>
         /// Views of Brand
         /// </summary>
-        public int? Views { get; set; }
+        public int? Views { get; set; } = 0;
 
         /// <summary>
         /// Inserted date of the Brand

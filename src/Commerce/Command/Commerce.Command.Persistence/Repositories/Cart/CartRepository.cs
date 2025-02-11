@@ -23,6 +23,7 @@ namespace Commerce.Command.Persistence.Repositories.Cart
         {
             entity.InsertedAt = DateTime.UtcNow;
             entity.InsertedBy = signManager.CurrentUser.Id;
+            entity.UserId = signManager.CurrentUser.Id;
             if (entity.Id == Guid.Empty) entity.Id = Guid.NewGuid();
             Entities.Add(entity);
         }

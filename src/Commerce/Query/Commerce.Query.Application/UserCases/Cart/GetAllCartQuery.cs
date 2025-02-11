@@ -13,7 +13,7 @@ namespace Commerce.Query.Application.UserCases.Cart
     /// </summary>
     public class GetAllCartQuery : IRequest<Result<List<CartDTO>>>
     {
-        public SearchCommand? SearchCommand { get; set; }
+
     }
 
     /// <summary>
@@ -42,16 +42,16 @@ namespace Commerce.Query.Application.UserCases.Cart
         public async Task<Result<List<CartDTO>>> Handle(GetAllCartQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var cartsQuery = cartRepository.FindAll().ApplySearch(request.SearchCommand!);
-            List<Entities.Cart> carts = cartsQuery.ToList();
-            List<CartDTO> cartDtos = carts.Select(cart =>
+
+            var carts = cartRepository.FindAll().ToList();
+            List<CartDTO> orderDtos = carts.Select(order =>
             {
-                CartDTO cartDto = cart.MapTo<CartDTO>()!;
-                cartDto.CartItems = cartItemRepository.FindAll(x => x.CartId == cart.Id).ToList().Select(cartItem => cartItem.MapTo<Entities.CartItem>()!).ToList();
-                return cartDto;
+                CartDTO orderDto = order.MapTo<CartDTO>()!;
+                orderDto.CartItems = cartItemRepository.FindAll(x => x.CartId == order.Id).ToList().Select(orderItem => orderItem.MapTo<Entities.CartItem>()!).ToList();
+                return orderDto;
             }).ToList();
 
-            return cartDtos;
+            return orderDtos;
         }
     }
 }

@@ -56,15 +56,15 @@ namespace Commerce.Command.Application.UserCases.Payment
             using var transaction = await paymentRepository.BeginTransactionAsync(cancellationToken);
             try
             {
-                payment!.PaymentDetails = request.PaymentDetails!.Select(detail => new Entities.PaymentDetails
-                {
-                    PaymentId = payment.Id,
-                    BankCode = detail.BankCode,
-                    BankName = detail.BankName,
-                    CardNumber = detail.CardNumber,
-                    Note = detail.Note,
-                    ExtraData = detail.ExtraData,
-                }).ToList();
+                //payment!.PaymentDetails = request.PaymentDetails!.Select(detail => new Entities.PaymentDetails
+                //{
+                //    PaymentId = payment.Id,
+                //    BankCode = detail.BankCode,
+                //    BankName = detail.BankName,
+                //    CardNumber = detail.CardNumber,
+                //    Note = detail.Note,
+                //    ExtraData = detail.ExtraData,
+                //}).ToList();
                 // Add data
                 paymentRepository.Create(payment!);
                 // Save data

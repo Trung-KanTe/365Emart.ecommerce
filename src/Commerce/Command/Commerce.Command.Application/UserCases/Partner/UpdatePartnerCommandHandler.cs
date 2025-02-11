@@ -7,6 +7,7 @@ using Commerce.Command.Contract.Validators;
 using Entities = Commerce.Command.Domain.Entities.Partner;
 using Commerce.Command.Domain.Abstractions.Repositories.Partner;
 using MediatR;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Partner
 {
@@ -24,7 +25,7 @@ namespace Commerce.Command.Application.UserCases.Partner
         public string? Website { get; set; }
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } 
     }
 
     /// <summary>
@@ -33,13 +34,15 @@ namespace Commerce.Command.Application.UserCases.Partner
     public class UpdatePartnerCommandHandler : IRequestHandler<UpdatePartnerCommand, Result>
     {
         private readonly IPartnerRepository partnerRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete partner request
         /// </summary>
-        public UpdatePartnerCommandHandler(IPartnerRepository partnerRepository)
+        public UpdatePartnerCommandHandler(IPartnerRepository partnerRepository, IFileService fileService)
         {
             this.partnerRepository = partnerRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -64,7 +67,15 @@ namespace Commerce.Command.Application.UserCases.Partner
                 }
                 // Update partner, keep original data if request is null
                 request.MapTo(partner, true);
-                partner.ValidateUpdate();
+                if (request.Icon is not null)
+                {
+                    string relativePath = "partners";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(partner.Name!, request.Icon, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    partner!.Icon = uploadedFilePath;
+                }
+                //partner.ValidateUpdate();
                 // Mark partner as Updated state
                 partnerRepository.Update(partner);
                 // Save partner to database

@@ -3,6 +3,9 @@ using Commerce.Command.Domain.Abstractions.Repositories.Promotion;
 using Entities = Commerce.Command.Domain.Entities.Promotion;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
+using Commerce.Command.Contract.Enumerations;
+using Commerce.Command.Contract.Errors;
+using Commerce.Command.Contract.Contants;
 
 namespace Commerce.Command.Application.UserCases.Promotion
 {
@@ -13,11 +16,10 @@ namespace Commerce.Command.Application.UserCases.Promotion
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? DiscountType { get; set; }
+        public string? DiscountCode { get; set; }
         public decimal? DiscountValue { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public DateTime? EndDate { get; set;}
     }
 
     /// <summary>
@@ -51,6 +53,12 @@ namespace Commerce.Command.Application.UserCases.Promotion
             using var transaction = await promotionRepository.BeginTransactionAsync(cancellationToken);
             try
             {
+                var code = await promotionRepository.FindSingleAsync(x => x.DiscountCode == request.DiscountCode, true, cancellationToken);
+                if (code is not null)
+                {
+                    return Result.Failure(StatusCode.Conflict, new Error(ErrorType.Conflict, ErrCodeConst.CONFLICT, MessConst.MSG_CONFLICT.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Promotion)) })));
+                } 
+                    
                 // Add data
                 promotionRepository.Create(promotion!);
                 // Save data

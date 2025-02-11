@@ -5,7 +5,6 @@ using Commerce.Command.Presentation.Abstractions;
 using Commerce.Command.Presentation.Constants;
 using Commerce.Command.Presentation.DTOs.Cart;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Command.Presentation.Service.Cart
@@ -16,7 +15,7 @@ namespace Commerce.Command.Presentation.Service.Cart
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.CART_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class cartService : ApiController
     {
         private readonly IMediator mediator;
@@ -53,6 +52,56 @@ namespace Commerce.Command.Presentation.Service.Cart
 
             };
             request.MapTo(command, true);
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for delete cart
+        /// </summary>
+        /// <param name="id">id of cart</param>
+        /// <returns>Action result</returns>
+        [HttpDelete("item")]
+        public async Task<IActionResult> DeleteCartItem(Guid? id)
+        {
+            var command = new DeleteCartItemCommand
+            {
+                Id = id
+            };
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for delete cart
+        /// </summary>
+        /// <param name="id">id of cart</param>
+        /// <returns>Action result</returns>
+        [HttpPut("item/decrease")]
+        public async Task<IActionResult> DecreaseCartItem(Guid? id)
+        {
+            Console.WriteLine($"Received request to decrease quantity for ID: {id}");
+            var command = new DecreaseCartItemCommand
+            {
+                Id = id
+            };
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for delete cart
+        /// </summary>
+        /// <param name="id">id of cart</param>
+        /// <returns>Action result</returns>
+        [HttpPut("item/increase")]
+        public async Task<IActionResult> IncreaseCartItem(Guid? id)
+        {
+            Console.WriteLine($"Received request to increase quantity for ID: {id}");
+            var command = new IncreaseCartItemCommand
+            {
+                Id = id
+            };
             var result = await mediator.Send(command);
             return Ok(result);
         }

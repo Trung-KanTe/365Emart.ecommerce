@@ -15,33 +15,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Command", "Command", "{96EE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Query", "Query", "{CF3F3B24-9756-4D95-B9D2-F634A011FECB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.API", "src\Commerce\Command\Commerce.Command.API\Commerce.Command.API.csproj", "{BF9BCA1C-BE6B-463E-9F1B-D297D4E15FA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.API", "src\Commerce\Command\Commerce.Command.API\Commerce.Command.API.csproj", "{BF9BCA1C-BE6B-463E-9F1B-D297D4E15FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Application", "src\Commerce\Command\Commerce.Command.Application\Commerce.Command.Application.csproj", "{A351E643-DBEA-4F30-8A25-6B353E7884C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Application", "src\Commerce\Command\Commerce.Command.Application\Commerce.Command.Application.csproj", "{A351E643-DBEA-4F30-8A25-6B353E7884C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Contract", "src\Commerce\Command\Commerce.Command.Contract\Commerce.Command.Contract.csproj", "{FB42BE39-F40E-4785-B4BD-2ECFACE086A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Contract", "src\Commerce\Command\Commerce.Command.Contract\Commerce.Command.Contract.csproj", "{FB42BE39-F40E-4785-B4BD-2ECFACE086A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Domain", "src\Commerce\Command\Commerce.Command.Domain\Commerce.Command.Domain.csproj", "{B13F8F69-CADF-46AB-8AED-E1C2C8C2B04F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Domain", "src\Commerce\Command\Commerce.Command.Domain\Commerce.Command.Domain.csproj", "{B13F8F69-CADF-46AB-8AED-E1C2C8C2B04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Infrastructure", "src\Commerce\Command\Commerce.Command.Infrastructure\Commerce.Command.Infrastructure.csproj", "{A74A36AF-82D6-4B8F-A3C8-5D9CF91A2E2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Infrastructure", "src\Commerce\Command\Commerce.Command.Infrastructure\Commerce.Command.Infrastructure.csproj", "{A74A36AF-82D6-4B8F-A3C8-5D9CF91A2E2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Persistence", "src\Commerce\Command\Commerce.Command.Persistence\Commerce.Command.Persistence.csproj", "{F75ACB85-7032-468B-B5B6-9031A335DB75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Persistence", "src\Commerce\Command\Commerce.Command.Persistence\Commerce.Command.Persistence.csproj", "{F75ACB85-7032-468B-B5B6-9031A335DB75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Command.Presentation", "src\Commerce\Command\Commerce.Command.Presentation\Commerce.Command.Presentation.csproj", "{AD904EEC-9AE5-465F-B7AA-05070C8AA337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Command.Presentation", "src\Commerce\Command\Commerce.Command.Presentation\Commerce.Command.Presentation.csproj", "{AD904EEC-9AE5-465F-B7AA-05070C8AA337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.API", "src\Commerce\Query\Commerce.Query.API\Commerce.Query.API.csproj", "{DA952CF2-B133-4538-B0D6-FDA159AF1E7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.API", "src\Commerce\Query\Commerce.Query.API\Commerce.Query.API.csproj", "{DA952CF2-B133-4538-B0D6-FDA159AF1E7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Application", "src\Commerce\Query\Commerce.Query.Application\Commerce.Query.Application.csproj", "{CE77827D-D245-4677-9B66-4451F0C659D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Application", "src\Commerce\Query\Commerce.Query.Application\Commerce.Query.Application.csproj", "{CE77827D-D245-4677-9B66-4451F0C659D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Contract", "src\Commerce\Query\Commerce.Query.Contract\Commerce.Query.Contract.csproj", "{AF068B94-D36A-474A-80E2-122DFB3240E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Contract", "src\Commerce\Query\Commerce.Query.Contract\Commerce.Query.Contract.csproj", "{AF068B94-D36A-474A-80E2-122DFB3240E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Domain", "src\Commerce\Query\Commerce.Query.Domain\Commerce.Query.Domain.csproj", "{BAFDD5EF-F1F3-48DC-AFB9-2F324FB832CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Domain", "src\Commerce\Query\Commerce.Query.Domain\Commerce.Query.Domain.csproj", "{BAFDD5EF-F1F3-48DC-AFB9-2F324FB832CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Infrastructure", "src\Commerce\Query\Commerce.Query.Infrastructure\Commerce.Query.Infrastructure.csproj", "{53288656-7498-44D2-9FA1-F8AB96B0E452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Infrastructure", "src\Commerce\Query\Commerce.Query.Infrastructure\Commerce.Query.Infrastructure.csproj", "{53288656-7498-44D2-9FA1-F8AB96B0E452}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Persistence", "src\Commerce\Query\Commerce.Query.Persistence\Commerce.Query.Persistence.csproj", "{2B518F3C-AC85-4CE9-8396-B6D67056A979}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Persistence", "src\Commerce\Query\Commerce.Query.Persistence\Commerce.Query.Persistence.csproj", "{2B518F3C-AC85-4CE9-8396-B6D67056A979}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commerce.Query.Presentation", "src\Commerce\Query\Commerce.Query.Presentation\Commerce.Query.Presentation.csproj", "{E2B9274E-368C-4AED-832F-05441FBD44AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commerce.Query.Presentation", "src\Commerce\Query\Commerce.Query.Presentation\Commerce.Query.Presentation.csproj", "{E2B9274E-368C-4AED-832F-05441FBD44AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway\ApiGateway.csproj", "{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{E2B9274E-368C-4AED-832F-05441FBD44AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2B9274E-368C-4AED-832F-05441FBD44AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B9274E-368C-4AED-832F-05441FBD44AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +133,7 @@ Global
 		{53288656-7498-44D2-9FA1-F8AB96B0E452} = {CF3F3B24-9756-4D95-B9D2-F634A011FECB}
 		{2B518F3C-AC85-4CE9-8396-B6D67056A979} = {CF3F3B24-9756-4D95-B9D2-F634A011FECB}
 		{E2B9274E-368C-4AED-832F-05441FBD44AE} = {CF3F3B24-9756-4D95-B9D2-F634A011FECB}
+		{3C61B94D-EC2D-49CC-AA39-DFAF6446AA0C} = {3F9EDF2D-C7C8-4BA4-ACBC-AB1460813B05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F746705D-16B3-4561-94A1-F3B23FCAFE33}

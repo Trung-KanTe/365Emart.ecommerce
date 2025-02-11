@@ -30,11 +30,6 @@ namespace Commerce.Query.Persistence.Configurations.ImportProduct
                 .HasColumnName(ImportProductConst.FIELD_IMPORT_PRODUCT_DETAILS_IMPORT_PRICE)
                 .IsRequired();
 
-
-            builder.Property(x => x.Note)
-                .HasColumnName(ImportProductConst.FIELD_IMPORT_PRODUCT_DETAILS_NOTE)
-                .HasMaxLength(ImportProductConst.IMPORT_PRODUCT_DETAILS_NOTE_MAX_LENGTH);
-
             builder.ToTable(ImportProductConst.TABLE_IMPORT_PRODUCT_DETAILS);
             builder.HasOne(mer => mer.ImportProduct).WithMany(ver => ver.ImportProductDetails).HasForeignKey(mer => mer.ImportProductId).OnDelete(DeleteBehavior.Cascade);
         }

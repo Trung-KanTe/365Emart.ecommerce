@@ -13,7 +13,6 @@
         public int Views { get; set; }
         public Guid? WardId { get; set; }
         public Guid? UserId { get; set; }
-        public Guid? PartnerId { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

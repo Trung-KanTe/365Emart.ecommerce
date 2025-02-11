@@ -7,6 +7,7 @@ using Commerce.Command.Contract.Validators;
 using Entities = Commerce.Command.Domain.Entities.Brand;
 using Commerce.Command.Domain.Abstractions.Repositories.Brand;
 using MediatR;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Brand
 {
@@ -30,13 +31,15 @@ namespace Commerce.Command.Application.UserCases.Brand
     public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, Result>
     {
         private readonly IBrandRepository brandRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete brand request
         /// </summary>
-        public UpdateBrandCommandHandler(IBrandRepository brandRepository)
+        public UpdateBrandCommandHandler(IBrandRepository brandRepository, IFileService fileService)
         {
             this.brandRepository = brandRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -61,7 +64,15 @@ namespace Commerce.Command.Application.UserCases.Brand
                 }
                 // Update brand, keep original data if request is null
                 request.MapTo(brand, true);
-                brand.ValidateUpdate();
+                if (request.Icon is not null)
+                {
+                    string relativePath = "brands";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(brand.Name!, request.Icon, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    brand!.Icon = uploadedFilePath;
+                }
+                //brand.ValidateUpdate();
                 // Mark brand as Updated state
                 brandRepository.Update(brand);
                 // Save brand to database

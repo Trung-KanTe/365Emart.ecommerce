@@ -59,11 +59,6 @@ namespace Commerce.Query.Domain.Entities.Shop
         public Guid? UserId { get; set; }
 
         /// <summary>
-        /// Partner ID associated with the Shop
-        /// </summary>
-        public Guid? PartnerId { get; set; }
-
-        /// <summary>
         /// Number of views for the Shop
         /// </summary>
         public int? Views { get; set; } = 0;

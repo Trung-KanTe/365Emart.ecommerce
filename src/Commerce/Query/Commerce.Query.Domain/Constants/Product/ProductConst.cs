@@ -32,6 +32,10 @@
         public const string FIELD_PRODUCT_REVIEW_UPDATED_BY = "pp_UpdatedBy";
         public const string FIELD_PRODUCT_REVIEW_IS_DELETED = "pp_IsDeleted";
 
+        public const string TABLE_PRODUCT_DETAIL = "ProductDetail";
+        public const string FIELD_PRODUCT_DETAIL_ID = "prodDetail_Id";
+        public const string FIELD_PRODUCT_DETAIL_QUANTITY = "prod_StockQuantity";
+
         public const int PRODUCT_REVIEW_COMMENT_MAX_LENGTH = 256;
 
         public const int PRODUCT_NAME_MAX_LENGTH = 128;

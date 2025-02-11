@@ -25,7 +25,7 @@ namespace Commerce.Command.Persistence.Repositories.Settings
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(ClaimTypes.Name, user.Name!)
         };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

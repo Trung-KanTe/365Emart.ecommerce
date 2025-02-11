@@ -67,9 +67,6 @@ namespace Commerce.Command.Domain.Entities.Cart
         /// </summary>
         public void ValidateCreate()
         {
-            var validator = Validator.Create(this);
-            validator.RuleFor(x => x.UserId).NotNull().IsGuid();
-            validator.Validate();
         }
 
         /// <summary>

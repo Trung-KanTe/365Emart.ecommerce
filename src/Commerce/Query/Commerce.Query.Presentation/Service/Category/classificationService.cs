@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Classification;
+using Commerce.Query.Application.UserCases.Classification;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -14,7 +15,7 @@ namespace Commerce.Query.Presentation.Service.Classification
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.CLASSIFICATION_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class classificationService : ApiController
     {
         private readonly IMediator mediator;
@@ -47,9 +48,24 @@ namespace Commerce.Query.Presentation.Service.Classification
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
         [HttpGet]
+        public async Task<IActionResult> GetAllClassifications([FromQuery] int pageNumber)
+        {
+            // Tạo query phân trang
+            var query = new GetAllClassificationQuery(pageNumber);
+            var result = await mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("name")]
         public async Task<IActionResult> GetAllClassifications()
         {
-            var query = new GetAllClassificationQuery();
+            var query = new GetAllClassificationsQuery();
             var result = await mediator.Send(query);
             return Ok(result);
         }

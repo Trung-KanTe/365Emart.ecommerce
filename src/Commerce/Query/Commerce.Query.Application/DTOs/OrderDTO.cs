@@ -11,6 +11,6 @@ namespace Commerce.Query.Application.DTOs
         public string? PaymentMethod { get; set; }
         public string? Status { get; set; }
         public bool? IsDeleted { get; set; }
-        public List<OrderItem>? OrderItems { get; set; }
+        public List<OrderItemDTO>? OrderItems { get; set; }
     }
 }

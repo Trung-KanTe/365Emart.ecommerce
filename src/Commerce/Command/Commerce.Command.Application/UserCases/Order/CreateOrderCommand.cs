@@ -3,8 +3,10 @@ using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Contract.Enumerations;
 using Commerce.Command.Contract.Errors;
 using Commerce.Command.Contract.Shared;
+using Commerce.Command.Domain.Abstractions.Repositories.Cart;
 using Commerce.Command.Domain.Abstractions.Repositories.Order;
 using Commerce.Command.Domain.Abstractions.Repositories.Promotion;
+using Commerce.Command.Domain.Entities.Cart;
 using Commerce.Command.Domain.Entities.Order;
 using MediatR;
 using Entiti = Commerce.Command.Domain.Entities.Promotion;
@@ -20,9 +22,6 @@ namespace Commerce.Command.Application.UserCases.Order
         public Guid? UserId { get; set; }
         public Guid? PromotionId { get; set; }
         public decimal? TotalAmount { get; set; }
-        public string? PaymentMethod { get; set; }
-        public string? Status { get; set; }
-        public bool? IsDeleted { get; set; } = false;
         public ICollection<OrderItem>? OrderItems { get; set; }
     }
 
@@ -33,14 +32,17 @@ namespace Commerce.Command.Application.UserCases.Order
     {
         private readonly IOrderRepository orderRepository;
         private readonly IPromotionRepository promotionRepository;
+        private readonly ICartRepository cartRepository;
+
 
         /// <summary>
         /// Handler for create Order request
         /// </summary>
-        public CreateOrderCommandHandler(IOrderRepository orderRepository, IPromotionRepository promotionRepository)
+        public CreateOrderCommandHandler(IOrderRepository orderRepository, IPromotionRepository promotionRepository, ICartRepository cartRepository)
         {
             this.orderRepository = orderRepository;
             this.promotionRepository = promotionRepository;
+            this.cartRepository = cartRepository;
         }
 
         /// <summary>
@@ -55,24 +57,29 @@ namespace Commerce.Command.Application.UserCases.Order
             Entities.Order? order = request.MapTo<Entities.Order>();
             // Validate for order
             order!.ValidateCreate();
+
+            var cart = await cartRepository.FindSingleAsync(x => x.UserId == request.UserId!.Value, true, cancellationToken, x => x.CartItems!);
+
             // Begin transaction
             using var transaction = await orderRepository.BeginTransactionAsync(cancellationToken);
             try
             {
-                order!.OrderItems = request.OrderItems!.Select(ver => new Entities.OrderItem
+                order!.OrderItems = cart.CartItems!.Select(cartItem => new Entities.OrderItem
                 {
                     OrderId = order.Id,
-                    ProductId = ver.ProductId,
-                    Price = ver.Price,
-                    Quantity = ver.Quantity,
-                    Total = ver.Price * ver.Quantity,
+                    ProductDetailId = cartItem.ProductDetailId,
+                    Price = cartItem.Price,
+                    Quantity = cartItem.Quantity,
+                    Total = cartItem.Total,
                 }).ToList();
                 var promotion = await promotionRepository.FindByIdAsync(request.PromotionId!.Value, true, cancellationToken);
                 if (promotion == null)
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entiti.Promotion)) })));
                 }
-                order.TotalAmount = order.OrderItems.Sum(v => v.Total) - (promotion!.DiscountValue);
+                cart.TotalQuantity = 0;
+                cart.CartItems!.Clear();
+                cartRepository.Update(cart);
                 // Add data
                 orderRepository.Create(order!);
                 // Save data

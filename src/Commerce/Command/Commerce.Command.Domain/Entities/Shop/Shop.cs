@@ -59,11 +59,6 @@ namespace Commerce.Command.Domain.Entities.Shop
         public Guid? UserId { get; set; }
 
         /// <summary>
-        /// Partner ID associated with the Shop
-        /// </summary>
-        public Guid? PartnerId { get; set; }
-
-        /// <summary>
         /// Number of views for the Shop
         /// </summary>
         public int? Views { get; set; } = 0;
@@ -119,7 +114,6 @@ namespace Commerce.Command.Domain.Entities.Shop
             validator.RuleFor(x => x.Views)!.GreaterThanOrEqual(0);
             validator.RuleFor(x => x.WardId).NotNull().IsGuid();
             validator.RuleFor(x => x.UserId).NotNull().IsGuid();
-            validator.RuleFor(x => x.PartnerId).NotNull().IsGuid();
             validator.Validate();
         }
 
@@ -140,7 +134,6 @@ namespace Commerce.Command.Domain.Entities.Shop
             validator.RuleFor(x => x.Views)!.GreaterThanOrEqual(0);
             validator.RuleFor(x => x.WardId).IsGuid();
             validator.RuleFor(x => x.UserId).IsGuid();
-            validator.RuleFor(x => x.PartnerId).IsGuid();
             validator.Validate();
         }
     }

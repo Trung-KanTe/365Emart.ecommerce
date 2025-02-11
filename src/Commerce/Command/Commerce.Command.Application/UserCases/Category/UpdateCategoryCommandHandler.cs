@@ -8,6 +8,7 @@ using Entities = Commerce.Command.Domain.Entities.Category;
 using Commerce.Command.Domain.Abstractions.Repositories.Category;
 using MediatR;
 using Commerce.Command.Domain.Entities.Category;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.CategoryCases.Category
 {
@@ -18,11 +19,11 @@ namespace Commerce.Command.Application.CategoryCases.Category
     {
         public Guid? Id { get; set; }
         public string? Name { get; set; }
-        public string? Image { get; set; } = null;
-        public string? Style { get; set; } = null;
+        public string? Image { get; set; } 
+        public string? Style { get; set; } 
         public Guid? UserId { get; set; }
-        public int? Views { get; set; } = 0;
-        public bool? IsDeleted { get; set; } = false;
+        public int? Views { get; set; } 
+        public bool? IsDeleted { get; set; }
         public List<Guid>? ClassificationIds { get; set; }
     }
 
@@ -32,13 +33,15 @@ namespace Commerce.Command.Application.CategoryCases.Category
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result>
     {
         private readonly ICategoryRepository categoryRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete category request
         /// </summary>
-        public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository)
+        public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository, IFileService fileService)
         {
             this.categoryRepository = categoryRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -56,14 +59,21 @@ namespace Commerce.Command.Application.CategoryCases.Category
             try
             {
                 // Need tracking to delete category
-                var category = await categoryRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);
+                var category = await categoryRepository.FindByIdAsync(request.Id.Value, true, cancellationToken, includeProperties: x=> x.ClassificationCategories!);
                 if (category == null)
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Category)) })));
                 }
                 // Update category, keep original data if request is null
                 request.MapTo(category, true);
-                category.ValidateUpdate();
+                if (request.Image is not null)
+                {
+                    string relativePath = "categories";
+                    // Upload ảnh và lấy đường dẫn lưu trữ
+                    string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Image, relativePath);
+                    // Cập nhật đường dẫn Icon
+                    category!.Image = uploadedFilePath;
+                }
 
                 category.ClassificationCategories = request.ClassificationIds?.Distinct().Select(classificationId => new ClassificationCategory
                 {

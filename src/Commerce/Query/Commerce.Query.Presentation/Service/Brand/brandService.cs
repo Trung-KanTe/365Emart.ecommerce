@@ -1,4 +1,6 @@
 ﻿using Asp.Versioning;
+using Commerce.Query.Application.BrandCases.Brand;
+using Commerce.Query.Application.UserCases.Brand;
 using Commerce.Query.Application.UserCases.Brand;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
@@ -14,7 +16,7 @@ namespace Commerce.Query.Presentation.Service.Brand
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.BRAND_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class brandService : ApiController
     {
         private readonly IMediator mediator;
@@ -47,9 +49,24 @@ namespace Commerce.Query.Presentation.Service.Brand
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
         [HttpGet]
+        public async Task<IActionResult> GetAllBrands([FromQuery] int pageNumber)
+        {
+            // Tạo query phân trang
+            var query = new GetAllBrandQuery(pageNumber);
+            var result = await mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("name")]
         public async Task<IActionResult> GetAllBrands()
         {
-            var query = new GetAllBrandQuery();
+            var query = new GetAllBrandsQuery();
             var result = await mediator.Send(query);
             return Ok(result);
         }

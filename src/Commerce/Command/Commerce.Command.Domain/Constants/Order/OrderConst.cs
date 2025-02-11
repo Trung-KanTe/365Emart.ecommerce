@@ -20,7 +20,7 @@
 
         public const string FIELD_ORDER_ITEM_ID = "oi_Id";
         public const string FIELD_ORDER_ITEM_ORDER_ID = "oi_OrderId";
-        public const string FIELD_ORDER_ITEM_PRODUCT_ID = "oi_ProductId";
+        public const string FIELD_ORDER_ITEM_PRODUCT_ID = "oi_ProductDetailId";
         public const string FIELD_ORDER_ITEM_QUANTITY = "oi_Quantity";
         public const string FIELD_ORDER_ITEM_PRICE = "oi_Price";
         public const string FIELD_ORDER_ITEM_TOTAL = "oi_Total";

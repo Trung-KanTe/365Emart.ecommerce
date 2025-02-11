@@ -20,11 +20,6 @@ namespace Commerce.Command.Domain.Entities.ImportProduct
         public Guid? PartnerId { get; set; }
 
         /// <summary>
-        /// Shop ID associated with the Import Product.
-        /// </summary>
-        public Guid? ShopId { get; set; }
-
-        /// <summary>
         /// Warehouse ID where the product is stored.
         /// </summary>
         public Guid? WareHouseId { get; set; }
@@ -87,7 +82,6 @@ namespace Commerce.Command.Domain.Entities.ImportProduct
         {
             var validator = Validator.Create(this);
             validator.RuleFor(x => x.PartnerId).NotNull().IsGuid();
-            validator.RuleFor(x => x.ShopId).NotNull().IsGuid();
             validator.RuleFor(x => x.WareHouseId).NotNull().IsGuid();
             validator.RuleFor(x => x.Note)!.MaxLength(ImportProductConst.IMPORT_PRODUCT_NOTE_MAX_LENGTH);
             validator.Validate();
@@ -100,7 +94,6 @@ namespace Commerce.Command.Domain.Entities.ImportProduct
         {
             var validator = Validator.Create(this);
             validator.RuleFor(x => x.PartnerId).IsGuid();
-            validator.RuleFor(x => x.ShopId).IsGuid();
             validator.RuleFor(x => x.WareHouseId).IsGuid();
             validator.RuleFor(x => x.Note)!.MaxLength(ImportProductConst.IMPORT_PRODUCT_NOTE_MAX_LENGTH);
             validator.Validate();
