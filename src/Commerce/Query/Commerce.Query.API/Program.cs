@@ -47,6 +47,7 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddJWT(builder.Configuration);
+builder.Services.AddRabbitMq(builder.Configuration);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>

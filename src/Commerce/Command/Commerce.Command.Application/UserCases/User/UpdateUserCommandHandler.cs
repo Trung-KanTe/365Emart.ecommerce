@@ -22,8 +22,8 @@ namespace Commerce.Command.Application.UserCases.User
         public string? PasswordHash { get; set; }
         public string? Tel { get; set; }
         public string? Address { get; set; }
-        public Guid? WardId { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public int? WardId { get; set; }
+        public bool? IsDeleted { get; set; } 
         public ICollection<UserRole>? UserRoles { get; set; }
     }
 
@@ -57,7 +57,7 @@ namespace Commerce.Command.Application.UserCases.User
             try
             {
                 // Need tracking to delete user
-                var user = await userRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);
+                var user = await userRepository.FindByIdAsync(request.Id.Value, true, cancellationToken, x => x.UserRoles!);
                 if (user == null)
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.User)) })));

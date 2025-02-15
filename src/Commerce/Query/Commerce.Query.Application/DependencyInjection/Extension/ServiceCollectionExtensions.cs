@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using Commerce.Query.Contract.Abstractions;
+using Commerce.Query.Contract.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Commerce.Query.Application.DependencyInjection.Extension
 {
@@ -14,6 +16,7 @@ namespace Commerce.Query.Application.DependencyInjection.Extension
         {
             // Register mediator
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()); });
+            services.AddScoped<IWebWardService, WebWardServiceRabbit>();
             return services;
         }
     }

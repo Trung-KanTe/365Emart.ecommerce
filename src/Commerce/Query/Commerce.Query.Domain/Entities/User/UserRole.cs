@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Commerce.Query.Domain.Entities.User
 {
-    public class UserRole 
+    public class UserRole : AggregateRoot<Guid>
     {
         /// <summary>
         /// User ID associated with the role
@@ -20,6 +21,9 @@ namespace Commerce.Query.Domain.Entities.User
         /// </summary>
         [NotMapped]
         [JsonIgnore]
-        public User? User { get; set; }       
+        public User? User { get; set; }
+        public override void Validate()
+        {
+        }
     }
 }

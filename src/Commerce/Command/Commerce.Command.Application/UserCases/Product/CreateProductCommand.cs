@@ -55,10 +55,9 @@ namespace Commerce.Command.Application.UserCases.Product
             // Validate for product
             if (request.Image is not null)
             {
+                string normalizedProductName = request.Name!.Replace(" ", "_");
                 string relativePath = "products";
-                // Upload ảnh và lấy đường dẫn lưu trữ
-                string uploadedFilePath = await fileService.UploadFile(request.Name!, request.Image, relativePath);
-                // Cập nhật đường dẫn Icon
+                string uploadedFilePath = await fileService.UploadFile(normalizedProductName, request.Image, relativePath);
                 product!.Image = uploadedFilePath;
             }
             //product!.ValidateCreate();

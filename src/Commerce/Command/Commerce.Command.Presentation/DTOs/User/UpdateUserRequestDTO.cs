@@ -7,8 +7,8 @@
         public string? PasswordHash { get; set; }
         public string? Tel { get; set; }
         public string? Address { get; set; }
-        public Guid? WardId { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public int? WardId { get; set; }
+        public bool? IsDeleted { get; set; }
         public List<Guid?>? RoleId { get; set; }
     }
 }

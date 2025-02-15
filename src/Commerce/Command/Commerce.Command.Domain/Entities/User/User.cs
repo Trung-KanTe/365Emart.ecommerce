@@ -37,7 +37,7 @@ namespace Commerce.Command.Domain.Entities.User
         /// <summary>
         /// Ward ID for the User's location
         /// </summary>
-        public Guid? WardId { get; set; }
+        public int? WardId { get; set; }
 
         /// <summary>
         /// Date when the User was created

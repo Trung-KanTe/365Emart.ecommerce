@@ -1,7 +1,4 @@
-﻿using Commerce.Query.Contract.DependencyInjection.Extensions;
-using Commerce.Query.Contract.Validators;
-using Commerce.Query.Domain.Abstractions.Aggregates;
-using Commerce.Query.Domain.Constants.User;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -37,7 +34,7 @@ namespace Commerce.Query.Domain.Entities.User
         /// <summary>
         /// Ward ID for the User's location
         /// </summary>
-        public Guid? WardId { get; set; }
+        public int? WardId { get; set; }
 
         /// <summary>
         /// Date when the User was created

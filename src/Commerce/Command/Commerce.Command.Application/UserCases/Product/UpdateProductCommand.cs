@@ -73,10 +73,9 @@ namespace Commerce.Command.Application.UserCases.Product
                 request.MapTo(product, true);
                 if (request.Image is not null)
                 {
+                    string normalizedProductName = product.Name!.Replace(" ", "_");
                     string relativePath = "products";
-                    // Upload ảnh và lấy đường dẫn lưu trữ
-                    string uploadedFilePath = await fileService.UploadFile(product.Name!, request.Image, relativePath);
-                    // Cập nhật đường dẫn Icon
+                    string uploadedFilePath = await fileService.UploadFile(normalizedProductName, request.Image, relativePath);
                     product!.Image = uploadedFilePath;
                 }
                 //product.ValidateUpdate();

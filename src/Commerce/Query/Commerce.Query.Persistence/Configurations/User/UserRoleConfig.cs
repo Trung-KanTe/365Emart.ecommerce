@@ -13,6 +13,7 @@ namespace Commerce.Query.Persistence.Configurations.User
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
             builder.HasKey(x => new { x.UserId, x.RoleId });
+            builder.Ignore(x => x.Id);
             builder.Property(x => x.UserId).HasColumnName(UserConst.FIELD_USER_ROLE_USER_ID);
             builder.Property(x => x.RoleId).HasColumnName(UserConst.FIELD_USER_ROLE_ROLE_ID);
             builder.ToTable(UserConst.TABLE_USER_ROLE);

@@ -22,5 +22,6 @@
         public const string PROMOTION_ROUTE = "/promotion";
         public const string PAYMENT_ROUTE = "/payment";
         public const string GET_ALL = "/get-all";
+        public const string WARD_ROUTE = "/ward";
     }
 }

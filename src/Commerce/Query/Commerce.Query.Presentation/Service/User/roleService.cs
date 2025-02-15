@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Role;
+using Commerce.Query.Application.UserCases.Role;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -14,7 +15,7 @@ namespace Commerce.Query.Presentation.Service.Role
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.ROLE_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class roleService : ApiController
     {
         private readonly IMediator mediator;
@@ -50,6 +51,19 @@ namespace Commerce.Query.Presentation.Service.Role
         public async Task<IActionResult> GetAllRoles()
         {
             var query = new GetAllRoleQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllRolesPaging([FromQuery] int pageNumber)
+        {
+            var query = new GetAllRolesQuery(pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

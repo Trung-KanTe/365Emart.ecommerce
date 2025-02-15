@@ -56,5 +56,20 @@ namespace Commerce.Query.Presentation.Service.User
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("localization")]
+        public async Task<IActionResult> GetAllUsersLocal ([FromQuery] int pageNumber)
+        {
+            // Tạo query phân trang
+            var query = new GetAllUsersQuery(pageNumber);
+            var result = await mediator.Send(query);
+
+            return Ok(result);
+        }
     }
 }
