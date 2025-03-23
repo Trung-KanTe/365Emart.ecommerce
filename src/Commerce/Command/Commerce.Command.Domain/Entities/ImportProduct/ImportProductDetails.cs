@@ -15,7 +15,7 @@ namespace Commerce.Command.Domain.Entities.ImportProduct
         /// <summary>
         /// Product ID associated with the detail.
         /// </summary>
-        public Guid? ProductId { get; set; }
+        public Guid? ProductDetailId { get; set; }
 
         /// <summary>
         /// ID of the Import Product this detail belongs to.

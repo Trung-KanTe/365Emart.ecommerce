@@ -1,10 +1,8 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Shop;
-using Commerce.Query.Application.UserCases.Shop;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Query.Presentation.Service.Shop
@@ -64,6 +62,32 @@ namespace Commerce.Query.Presentation.Service.Shop
         public async Task<IActionResult> GetAllShopsPaging([FromQuery] int pageNumber)
         {
             var query = new GetAllShopPagingQuery(pageNumber);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-product")]
+        public async Task<IActionResult> GetAllProductByShopId([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
+        {
+            var query = new GetAllProductByIdQuery(id, pageNumber, pageSize);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-product-userId")]
+        public async Task<IActionResult> GetAllProductByUserId([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
+        {
+            var query = new GetAllProductByUserIdQuery(id, pageNumber, pageSize);
             var result = await mediator.Send(query);
             return Ok(result);
         }

@@ -26,6 +26,7 @@
         public const string FIELD_PRODUCT_REVIEW_USER_ID = "pp_UserId";
         public const string FIELD_PRODUCT_REVIEW_RATING = "pp_Rating";
         public const string FIELD_PRODUCT_REVIEW_COMMENT = "pp_Comment";
+        public const string FIELD_PRODUCT_REVIEW_IMAGE = "pp_Image";
         public const string FIELD_PRODUCT_REVIEW_INSERTED_AT = "pp_InsertedAt";
         public const string FIELD_PRODUCT_REVIEW_INSERTED_BY = "pp_InsertedBy";
         public const string FIELD_PRODUCT_REVIEW_UPDATED_AT = "pp_UpdatedAt";

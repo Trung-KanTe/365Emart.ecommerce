@@ -6,6 +6,7 @@ using Commerce.Query.Domain.Abstractions.Repositories.Cart;
 using Commerce.Query.Domain.Abstractions.Repositories.Product;
 using Commerce.Query.Domain.Entities.Product;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Entities = Commerce.Query.Domain.Entities.Cart;
 using Entity = Commerce.Query.Domain.Entities.Product;
 
@@ -46,53 +47,67 @@ namespace Commerce.Query.Application.UserCases.Cart
         /// <param name="request">Request to handle</param>
         /// <param name="cancellationToken"></param>
         /// <returns>Result with cart data</returns>
-        public async Task<Result<CartDTO>> Handle(GetCartByIdQuery request,
-                                                 CancellationToken cancellationToken)
+        public async Task<Result<CartDTO>> Handle(GetCartByIdQuery request, CancellationToken cancellationToken)
         {
-            // Create validator for request 
             var validator = Validator.Create(request);
-            // Setup rule for request id that must be greater than 0
             validator.RuleFor(x => x.UserId).NotNull().IsGuid();
-            // Validate request
             validator.Validate();
 
-            var cart = await cartRepository.FindSingleAsync(x => x.UserId == request.UserId!.Value, false, cancellationToken, x => x.CartItems!);
+            var cart = await cartRepository.FindSingleAsync(
+                x => x.UserId == request.UserId!.Value,
+                false,
+                cancellationToken,
+                x => x.CartItems!);
 
-            var cartItemsWithProductDetails = cart.CartItems!.Where(x => x.ProductDetailId.HasValue).ToList();
-
-            // Xử lý từng CartItem đồng bộ
-            foreach (var cartItem in cartItemsWithProductDetails)
+            if (cart == null)
             {
-                // Lấy ProductDetail cho từng CartItem
-                ProductDetail? productDetail = await productDetailRepository.FindByIdAsync(cartItem.ProductDetailId!.Value, true, cancellationToken);
-
-                if (productDetail != null)
-                {
-                    // Lấy Product liên quan đến ProductDetail
-                    Entity.Product? product = await productRepository.FindByIdAsync(productDetail.ProductId!.Value, true, cancellationToken);
-                }
-
-                // Gán thông tin ProductDetail đã cập nhật vào CartItem nếu cần
-                cartItem.ProductDetails = productDetail;
+                return Result.Ok(new CartDTO()); // Trả về giỏ hàng rỗng nếu không tìm thấy
             }
 
-            // Tiếp tục xây dựng CartDTO
-            CartDTO? orderDto = cart.MapTo<CartDTO>()!;
-            orderDto.CartItems = cart.CartItems!.Select(mc =>
+            var cartDto = new CartDTO
             {
-                Entities.CartItem? merClass = mc.MapTo<Entities.CartItem>();
-                merClass!.ProductDetails = new ProductDetail
-                {
-                    Id = mc.ProductDetailId!.Value,
-                    ProductId = mc.ProductDetails?.ProductId, // Lấy thông tin từ ProductDetail
-                    Size = mc.ProductDetails?.Size,
-                    Color = mc.ProductDetails?.Color,
-                    StockQuantity = mc.ProductDetails?.StockQuantity,
-                };
-                return merClass;
-            }).ToList();
+                Id = cart.Id,
+                UserId = cart.UserId,
+                TotalQuantity = cart.TotalQuantity,
+                CartItems = new List<CartItemDTO>()
+            };
 
-            return orderDto;
+            foreach (var cartItem in cart.CartItems!)
+            {
+                var cartItemDto = new CartItemDTO
+                {
+                    Id = cartItem.Id,
+                    CartId = cartItem.CartId,
+                    ProductDetailId = cartItem.ProductDetailId,
+                    Price = cartItem.Price,
+                    Quantity = cartItem.Quantity,
+                    Total = cartItem.Total
+                };
+
+                if (cartItem.ProductDetailId.HasValue)
+                {
+                    var productDetail = await productDetailRepository.FindByIdAsync(cartItem.ProductDetailId.Value, true, cancellationToken);
+                    if (productDetail != null)
+                    {
+                        var product = await productRepository.FindByIdAsync(productDetail.ProductId!.Value, true, cancellationToken);
+
+                        cartItemDto.ProductDetails = new ProductDetailDTO
+                        {
+                            Id = productDetail.Id,
+                            ProductId = productDetail.ProductId,
+                            Size = productDetail.Size,
+                            Color = productDetail.Color
+                        };
+
+                        cartItemDto.ProductName = product?.Name;
+                        cartItemDto.ProductImage = product?.Image;
+                    }
+                }
+
+                cartDto.CartItems.Add(cartItemDto);
+            }
+
+            return Result.Ok(cartDto);
         }
     }
 }

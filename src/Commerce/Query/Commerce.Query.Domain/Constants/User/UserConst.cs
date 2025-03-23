@@ -26,6 +26,11 @@
         public const string FIELD_ROLE_ID = "role_Id";
         public const string FIELD_ROLE_NAME = "role_Name";
         public const string FIELD_ROLE_DESCRIPTION = "role_Description";
+        public const string FIELD_ROLE_INSERTED_AT = "role_InsertedAt";
+        public const string FIELD_ROLE_INSERTED_BY = "role_InsertedBy";
+        public const string FIELD_ROLE_UPDATED_AT = "role_UpdatedAt";
+        public const string FIELD_ROLE_UPDATED_BY = "role_UpdatedBy";
+        public const string FIELD_ROLE_IS_DELETED = "role_IsDeleted";
 
         public const int ROLE_NAME_MAX_LENGTH = 128;
         public const int ROLE_DESCRIPTION_MAX_LENGTH = 256;

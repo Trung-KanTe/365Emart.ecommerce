@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
+using Commerce.Query.Application.DistrictCases.District;
 using Commerce.Query.Application.UserCases.Ward;
+using Commerce.Query.Application.WardCases.Ward;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
@@ -37,6 +39,30 @@ namespace Commerce.Query.Presentation.Service.Ward
             var result = await mediator.Send(query);
 
             return Ok(result);
-        }      
+        }
+
+        [MapToApiVersion(1)]
+        [HttpGet("district/{districtId:int}")]
+        public async Task<IActionResult> GetDistrictById(int? districtId)
+        {
+            var query = new GetWardByIdQuery
+            {
+                DistrictId = districtId
+            };
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        [MapToApiVersion(1)]
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetDetailWard(int id)
+        {
+            var query = new GetDetailWardQuery
+            {
+                Id = id
+            };
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

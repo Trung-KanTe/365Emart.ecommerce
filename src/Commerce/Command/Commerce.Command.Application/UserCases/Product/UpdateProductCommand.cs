@@ -58,8 +58,8 @@ namespace Commerce.Command.Application.UserCases.Product
         public async Task<Result> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var validator = Validator.Create(request);
-            validator.RuleFor(x => x.Id).NotNull().IsGuid();
-            validator.Validate();
+            //validator.RuleFor(x => x.Id).NotNull().IsGuid();
+            //validator.Validate();
             using var transaction = await productRepository.BeginTransactionAsync(cancellationToken);
             try
             {
@@ -98,10 +98,11 @@ namespace Commerce.Command.Application.UserCases.Product
                 transaction.Commit();
                 return Result.Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Rollback transaction
                 transaction.Rollback();
+                Console.WriteLine($"Error: {ex.Message}, Inner: {ex.InnerException?.Message}");
                 throw;
             }
         }

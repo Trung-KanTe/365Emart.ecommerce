@@ -70,7 +70,7 @@ namespace Commerce.Command.Application.UserCases.Product
                     ProductId = product.Id,
                     Size = ver.Size,
                     StockQuantity = 0,
-                    Color = ver.Color,
+                    Color = string.IsNullOrWhiteSpace(ver.Color) || ver.Color == "-" ? null : ver.Color
                 }).ToList();
                 // Add data
                 productRepository.Create(product!);

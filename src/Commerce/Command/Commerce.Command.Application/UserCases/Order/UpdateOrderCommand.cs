@@ -66,21 +66,7 @@ namespace Commerce.Command.Application.UserCases.Order
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Order)) })));
                 }
                 // Update order, keep original data if request is null
-                request.MapTo(order, true);
-                order!.OrderItems = request.OrderItems!.Select(ver => new Entities.OrderItem
-                {
-                    OrderId = order.Id,
-                    ProductDetailId = ver.ProductDetailId,
-                    Price = ver.Price,
-                    Quantity = ver.Quantity,
-                    Total = ver.Price * ver.Quantity,
-                }).ToList();
-                var promotion = await promotionRepository.FindByIdAsync(request.PromotionId!.Value, true, cancellationToken);
-                if (promotion == null)
-                {
-                    return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entiti.Promotion)) })));
-                }
-                order.TotalAmount = order.OrderItems.Sum(v => v.Total) - (promotion!.DiscountValue);
+                request.MapTo(order, true);               
 
                 // Mark order as Updated state
                 orderRepository.Update(order);

@@ -8,5 +8,6 @@ namespace Commerce.Query.Application.DTOs
         public string? Name { get; set; }
         public string? FullName { get; set; }
         public LocalizationFullDTO? LocalizationFullDTO { get; set; }
+        public LocalizationDetailDTO? LocalizationDetailDTO { get; set; }
     }
 }

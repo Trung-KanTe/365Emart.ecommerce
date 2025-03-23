@@ -9,7 +9,9 @@ namespace Commerce.Query.Application.DTOs
         public Guid? PromotionId { get; set; }
         public decimal? TotalAmount { get; set; }
         public string? PaymentMethod { get; set; }
+        public string? ShopName { get; set; }
         public string? Status { get; set; }
+        public DateTime? InsertedAt { get; set; }
         public bool? IsDeleted { get; set; }
         public List<OrderItemDTO>? OrderItems { get; set; }
     }

@@ -70,14 +70,14 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
                     importProduct!.ImportProductDetails = request.ImportProductDetails!.Select(ver => new Entities.ImportProductDetails
                     {
                         ImportProductId = importProduct.Id,
-                        ProductId = ver.ProductId,
+                        ProductDetailId = ver.ProductDetailId,
                         ImportPrice = ver.ImportPrice,
                         Quantity = ver.Quantity,
                     }).ToList();
 
                     foreach (var item in importProduct.ImportProductDetails)
                     {
-                        var stockExist = await productStockRepository.FindSingleAsync(x => x.ProductId == item.ProductId && x.WareHouseId == importProduct.WareHouseId, true, cancellationToken);
+                        var stockExist = await productStockRepository.FindSingleAsync(x => x.ProductDetailId == item.ProductDetailId && x.WareHouseId == importProduct.WareHouseId, true, cancellationToken);
                         if (stockExist != null)
                         {
                             stockExist.Quantity = stockExist.Quantity + item.Quantity;
@@ -87,7 +87,7 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
                         {
                             var stock = new ProductStock
                             {
-                                ProductId = item.ProductId,
+                                ProductDetailId = item.ProductDetailId,
                                 WareHouseId = importProduct.WareHouseId,
                                 Quantity = item.Quantity,
                             };

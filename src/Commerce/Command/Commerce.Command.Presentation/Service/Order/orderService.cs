@@ -72,5 +72,30 @@ namespace Commerce.Command.Presentation.Service.Order
             var result = await mediator.Send(command);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Api version 1 for update order
+        /// </summary>
+        /// <param name="id">Id of order need to be updated</param>
+        /// <param name="request">Request body contains content to update</param>
+        /// <returns></returns>
+        [HttpPut("method")]
+        public async Task<IActionResult> UpdateStatusOrder(Guid? id)
+        {
+            var command = new UpdateStatusOrderCommand
+            {
+                Id = id,
+
+            };
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("now")]
+        public async Task<IActionResult> CreateOrderNow(CreateOrderNowCommand command)
+        {
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

@@ -4,9 +4,11 @@ using Commerce.Command.API.DependencyInjection.Options;
 using Commerce.Command.API.Middleware;
 using Commerce.Command.Application.DependencyInjection.Extension;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
+using Commerce.Command.Infrastructure.DependencyInjection.Extensions;
 using Commerce.Command.Persistence.DependencyInjection.Extensions;
 using Commerce.Command.Presentation.Abstractions;
 using Commerce.Command.Presentation.Common;
+using Hangfire;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +48,7 @@ builder.Services.AddApiVersioning(
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddJWT(builder.Configuration);
 builder.Services.AddCors(options =>
 {
@@ -64,4 +67,6 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapPresentation();
+app.UseHangfireDashboard();
+
 app.Run();

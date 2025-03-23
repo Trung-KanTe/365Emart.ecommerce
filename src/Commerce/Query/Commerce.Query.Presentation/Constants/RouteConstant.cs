@@ -23,5 +23,7 @@
         public const string PAYMENT_ROUTE = "/payment";
         public const string GET_ALL = "/get-all";
         public const string WARD_ROUTE = "/ward";
+        public const string DISTRICT_ROUTE = "/district";
+        public const string PROVINCE_ROUTE = "/province";
     }
 }

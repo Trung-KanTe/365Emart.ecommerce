@@ -19,35 +19,26 @@ namespace Commerce.Query.Contract.Helpers
                 query = query.ApplySorting(order);
             }
 
-            // Apply Paging
-            query = query.Skip((searchCommand.PageNumber - 1) * searchCommand.PageSize)
-                         .Take(searchCommand.PageSize);
-
             return query;
         }
 
         private static IQueryable<T> ApplyFilter<T>(this IQueryable<T> query, FilterParam filter)
         {
             var parameter = Expression.Parameter(typeof(T), "x");
-            var property = Expression.PropertyOrField(parameter, filter.Name);
 
-            // Chuyển đổi giá trị sang kiểu phù hợp
+            string[] properties = filter.Name.Split('.');
+            Expression property = parameter;
+
+            foreach (var prop in properties)
+            {
+                property = Expression.PropertyOrField(property, prop);
+            }
+
             object convertedValue;
             try
             {
-                if (Nullable.GetUnderlyingType(property.Type) != null)
-                {
-                    // Kiểu nullable, chuyển đổi giá trị sang kiểu không nullable
-                    var underlyingType = Nullable.GetUnderlyingType(property.Type);
-                    convertedValue = string.IsNullOrEmpty(filter.Value)
-                        ? null
-                        : Convert.ChangeType(filter.Value, underlyingType);
-                }
-                else
-                {
-                    // Kiểu không nullable
-                    convertedValue = Convert.ChangeType(filter.Value, property.Type);
-                }
+                var propertyType = Nullable.GetUnderlyingType(property.Type) ?? property.Type;
+                convertedValue = Convert.ChangeType(filter.Value, propertyType);
             }
             catch (Exception ex)
             {
@@ -57,7 +48,6 @@ namespace Commerce.Query.Contract.Helpers
             var constant = Expression.Constant(convertedValue, property.Type);
             Expression condition;
 
-            // Áp dụng điều kiện
             switch (filter.Condition)
             {
                 case "=":
@@ -82,9 +72,24 @@ namespace Commerce.Query.Contract.Helpers
                     throw new NotSupportedException($"Condition '{filter.Condition}' is not supported.");
             }
 
-            var lambda = Expression.Lambda<Func<T, bool>>(condition, parameter);
-            return query.Where(lambda);
-        }     
+            // Nếu là danh sách, áp dụng Any()
+            if (property.Type == typeof(IEnumerable<>).MakeGenericType(property.Type.GetGenericArguments()[0]))
+            {
+                var lambda = Expression.Lambda(condition, parameter);
+                var anyMethod = typeof(Enumerable).GetMethods()
+                    .First(m => m.Name == "Any" && m.GetParameters().Length == 2)
+                    .MakeGenericMethod(property.Type.GetGenericArguments()[0]);
+
+                var anyCall = Expression.Call(anyMethod, property, lambda);
+                var finalLambda = Expression.Lambda<Func<T, bool>>(anyCall, parameter);
+                return query.Where(finalLambda);
+            }
+            else
+            {
+                var lambda = Expression.Lambda<Func<T, bool>>(condition, parameter);
+                return query.Where(lambda);
+            }
+        }
 
         private static IQueryable<T> ApplySorting<T>(this IQueryable<T> query, OrderParam order)
         {

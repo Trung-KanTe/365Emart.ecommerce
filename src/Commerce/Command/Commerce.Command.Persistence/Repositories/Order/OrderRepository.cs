@@ -23,17 +23,10 @@ namespace Commerce.Command.Persistence.Repositories.Order
         {
             entity.InsertedAt = DateTime.UtcNow;
             entity.InsertedBy = signManager.CurrentUser.Id;
-            entity.Status = "đang chờ xử lý";
-            entity.PaymentMethod = "Direct Check";
+            entity.Status = "pending";
+            entity.PaymentMethod = "Cash";
             if (entity.Id == Guid.Empty) entity.Id = Guid.NewGuid();
             Entities.Add(entity);
-        }
-
-        public virtual void Update(Entities.Order entity)
-        {
-            entity.UpdatedAt = DateTime.UtcNow;
-            entity.UpdatedBy = signManager.CurrentUser.Id;
-            Entities.Update(entity);
         }
     }
 }

@@ -29,6 +29,9 @@ namespace Commerce.Query.Persistence.Configurations.Product
             builder.Property(x => x.Rating)
                 .HasColumnName(ProductConst.FIELD_PRODUCT_REVIEW_RATING);
 
+            builder.Property(x => x.Image)
+                .HasColumnName(ProductConst.FIELD_PRODUCT_REVIEW_IMAGE);
+
             // Thuộc tính Comment
             builder.Property(x => x.Comment)
                 .HasColumnName(ProductConst.FIELD_PRODUCT_REVIEW_COMMENT);

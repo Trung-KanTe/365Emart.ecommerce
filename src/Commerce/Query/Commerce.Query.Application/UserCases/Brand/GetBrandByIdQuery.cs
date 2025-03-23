@@ -11,7 +11,7 @@ namespace Commerce.Query.Application.UserCases.Brand
     /// Request to get brand by id
     /// </summary>
     public record GetBrandByIdQuery : IRequest<Result<Entities.Brand>>
-    {
+    {        
         public Guid? Id { get; init; }
     }
 

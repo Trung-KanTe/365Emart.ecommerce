@@ -57,12 +57,15 @@ namespace Commerce.Query.Application.UserCases.Ward
 
             // Gọi service để lấy thông tin địa phương
             var localizations = await webWardService.GetLocalFullsByWardIds(wardIds);
+            var localizationDetails = await webWardService.GetLocalDetailsByWardIds(wardIds);
 
             // Map dữ liệu LocalizationFullDTO vào từng user
             foreach (var user in userDTOs)
             {
                 var localization = localizations.FirstOrDefault(l => l.WardId == user.Id);
                 user.LocalizationFullDTO = localization;
+                var localizationDetail = localizationDetails.FirstOrDefault(l => l.Ward.Id == user.Id);
+                user.LocalizationDetailDTO = localizationDetail;
             }
             return userDTOs;
         }

@@ -15,9 +15,9 @@ namespace Commerce.Query.Persistence.Configurations.Ward
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName(WardConst.FIELD_USER_ID);
             builder.Property(x => x.Name).HasColumnName(WardConst.FIELD_USER_NAME);
-            builder.Property(x => x.FullName).HasColumnName(WardConst.FIELD_USER_FULL_NAME);        
-            builder.ToTable(WardConst.TABLE_USER);
-           
+            builder.Property(x => x.FullName).HasColumnName(WardConst.FIELD_USER_FULL_NAME);
+            builder.Property(x => x.DistrictId).HasColumnName(WardConst.FIELD_USER_DISTRICT);
+            builder.ToTable(WardConst.TABLE_USER);         
         }
     }
 }

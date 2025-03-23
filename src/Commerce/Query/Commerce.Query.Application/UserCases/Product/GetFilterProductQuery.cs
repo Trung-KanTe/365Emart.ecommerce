@@ -11,47 +11,61 @@ namespace Commerce.Query.Application.UserCases.Product
     /// <summary>
     /// Request to get all product
     /// </summary>
-    public class GetFilterProductQuery : IRequest<Result<List<ProductDTO>>>
+    public class GetFilterProductQuery : IRequest<Result<PaginatedResult<ProductDTO>>>
     {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
         public SearchCommand? SearchCommand { get; set; }
     }
 
     /// <summary>
     /// Handler for get all product request
     /// </summary>
-    public class GetFilterProductQueryHandler : IRequestHandler<GetFilterProductQuery, Result<List<ProductDTO>>>
+    public class GetFilterProductQueryHandler : IRequestHandler<GetFilterProductQuery, Result<PaginatedResult<ProductDTO>>>
     {
         private readonly IProductRepository productRepository;
         private readonly IProductDetailRepository productDetailRepository;
 
-        /// <summary>
-        /// Handler for get all product request
-        /// </summary>
         public GetFilterProductQueryHandler(IProductRepository productRepository, IProductDetailRepository productDetailRepository)
         {
             this.productRepository = productRepository;
             this.productDetailRepository = productDetailRepository;
         }
 
-        /// <summary>
-        /// Handle request
-        /// </summary>
-        /// <param name="request">Request to handle</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>Result with list product as data</returns>
-        public async Task<Result<List<ProductDTO>>> Handle(GetFilterProductQuery request,
-                                                       CancellationToken cancellationToken)
+        public async Task<Result<PaginatedResult<ProductDTO>>> Handle(GetFilterProductQuery request, CancellationToken cancellationToken)
         {
             var productsQuery = productRepository.FindAll().ApplySearch(request.SearchCommand!);
-            List<Entities.Product> products = productsQuery.ToList();
-            List<ProductDTO> productDtos = products.Select(product =>
+
+            // Lấy tổng số sản phẩm sau khi áp dụng filter
+            int totalCount = productsQuery.Count();
+
+            // Kiểm tra nếu trang không hợp lệ (quá lớn so với dữ liệu)
+            if (totalCount == 0 || (request.PageNumber - 1) * request.PageSize >= totalCount)
             {
-                ProductDTO productDto = product.MapTo<ProductDTO>()!;
-                productDto.ProductDetails = productDetailRepository.FindAll(x => x.ProductId == product.Id).ToList().Select(productItem => productItem.MapTo<Entities.ProductDetail>()!).ToList();
+                return new PaginatedResult<ProductDTO>(request.PageNumber, request.PageSize, totalCount, new List<ProductDTO>());
+            }
+
+            // Áp dụng phân trang đúng cách
+            var pagedProducts = productsQuery
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToList();
+
+            // Chuyển đổi sang DTO
+            var productDtos = pagedProducts.Select(product =>
+            {
+                var productDto = product.MapTo<ProductDTO>()!;
+                productDto.ProductDetails = productDetailRepository
+                    .FindAll(x => x.ProductId == product.Id)
+                    .ToList()
+                    .Select(orderItem => orderItem.MapTo<Entities.ProductDetail>()!)
+                    .ToList();
                 return productDto;
             }).ToList();
 
-            return productDtos;
+            // Trả về dữ liệu phân trang
+            var paginatedResult = new PaginatedResult<ProductDTO>(request.PageNumber, request.PageSize, totalCount, productDtos);
+            return paginatedResult;
         }
     }
 }

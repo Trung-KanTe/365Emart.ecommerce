@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Commerce.Command.Domain.Abstractions.Repositories.Order;
 using Commerce.Command.Domain.Abstractions.Repositories.Payment;
 using Commerce.Command.Presentation.Abstractions;
 using Commerce.Command.Presentation.Constants;
@@ -19,6 +20,7 @@ namespace Commerce.Command.Presentation.Service.Payment
         private readonly IVnpay _vnpay;
         private readonly IConfiguration _configuration;
         private readonly IPaymentRepository paymentRepository;
+        private readonly IOrderRepository orderRepository;
 
         public VnpayPayment(IVnpay vnPayservice, IConfiguration configuration, IPaymentRepository paymentRepository)
         {
@@ -36,7 +38,7 @@ namespace Commerce.Command.Presentation.Service.Payment
         /// <param name="description">Mô tả giao dịch</param>
         /// <returns></returns>
         [HttpGet("CreatePaymentUrl")]
-        public ActionResult<string> CreatePaymentUrl(double money, string description, Guid? orderId)
+        public async Task<ActionResult<string>> CreatePaymentUrl(double money, string description, Guid orderId)
         {
             try
             {
@@ -63,9 +65,15 @@ namespace Commerce.Command.Presentation.Service.Payment
                     PaymentStatus = "Success",
                     OrderInfo = description,
                     BankCode = request.PaymentId,
-                };
+                    ReturnUrl = "https://localhost:7149/api/v1/payment/PaymentCallback",
+                    BankName = "NCB",
+                    CardNumber = "9704198526191432198",
+                    TransactionId = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0),
+                    ResponseCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
+            };
+
                 paymentRepository.Create(payment);
-                paymentRepository.SaveChangesAsync();
+                await paymentRepository.SaveChangesAsync(); // Thêm await
 
                 var paymentUrl = _vnpay.GetPaymentUrl(request);
 

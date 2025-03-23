@@ -41,6 +41,7 @@ namespace Commerce.Command.Contract.DependencyInjection.Extensions
             });
             services.AddScoped<IVnpay, Vnpay>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IEmailSender, EmailSender>();
             return services;
         }      
     }

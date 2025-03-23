@@ -70,9 +70,21 @@ namespace Commerce.Query.Application.UserCases.Order
                             var product = await productRepository.FindByIdAsync(productDetail.ProductId.Value, true, cancellationToken);
                             if (product != null)
                             {
-                                // Gán ProductName vào OrderItem
-                                orderItem.ProductName = product.Name; // Giả sử `Product` có trường `Name`
+                                // Gán thông tin Product vào OrderItem
+                                orderItem.ProductId = product.Id;
+                                orderItem.ProductName = product.Name;
+                                orderItem.ProductDescription = product.Description;
+                                orderItem.ProductImage = product.Image;
                             }
+
+                            // Lấy danh sách ProductDetail theo ProductId
+                            var productDet = await productDetailRepository.FindByIdAsync(orderItem.ProductDetailId.Value, true, cancellationToken);
+
+                            if (productDet != null)
+                            {
+                                orderItem.ProductDetails = productDetail.MapTo<ProductDetailDTO>();
+                            }
+
                         }
                     }
                 }

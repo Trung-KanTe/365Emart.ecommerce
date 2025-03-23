@@ -47,7 +47,7 @@ namespace Commerce.Query.Application.UserCases.Cart
             List<CartDTO> orderDtos = carts.Select(order =>
             {
                 CartDTO orderDto = order.MapTo<CartDTO>()!;
-                orderDto.CartItems = cartItemRepository.FindAll(x => x.CartId == order.Id).ToList().Select(orderItem => orderItem.MapTo<Entities.CartItem>()!).ToList();
+                orderDto.CartItems = cartItemRepository.FindAll(x => x.CartId == order.Id).ToList().Select(orderItem => orderItem.MapTo<CartItemDTO>()!).ToList();
                 return orderDto;
             }).ToList();
 

@@ -48,6 +48,11 @@ namespace Commerce.Query.Application.UserCases.Shop
 
             // Find shop without allow null return. If shop not found will throw NotFoundException
             var shop = await shopRepository.FindByIdAsync(request.Id!.Value, false, cancellationToken);
+            if (shop == null)
+            {
+                var shops = await shopRepository.FindSingleAsync(x => x.UserId == request.Id, false, cancellationToken);
+                return shops!;
+            }    
             return shop!;
         }
     }

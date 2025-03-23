@@ -7,6 +7,7 @@ using Commerce.Command.Contract.Validators;
 using Entities = Commerce.Command.Domain.Entities.Product;
 using Commerce.Command.Domain.Abstractions.Repositories.Product;
 using MediatR;
+using Commerce.Command.Contract.Abstractions;
 
 namespace Commerce.Command.Application.UserCases.Product
 {
@@ -20,6 +21,7 @@ namespace Commerce.Command.Application.UserCases.Product
         public Guid? UserId { get; set; }
         public int? Rating { get; set; }
         public string? Comment { get; set; }
+        public string? Image { get; set; }
         public bool? IsDeleted { get; set; }
     }
 
@@ -29,13 +31,17 @@ namespace Commerce.Command.Application.UserCases.Product
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateProductReviewCommand, Result>
     {
         private readonly IProductReviewRepository productReviewRepository;
+        private readonly IProductRepository productRepository;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Handler for delete productReview request
         /// </summary>
-        public UpdateCategoryCommandHandler(IProductReviewRepository productReviewRepository)
+        public UpdateCategoryCommandHandler(IProductReviewRepository productReviewRepository, IProductRepository productRepository, IFileService fileService)
         {
             this.productReviewRepository = productReviewRepository;
+            this.productRepository = productRepository;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -58,9 +64,17 @@ namespace Commerce.Command.Application.UserCases.Product
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.ProductReview)) })));
                 }
+                
                 // Update productReview, keep original data if request is null
                 request.MapTo(productReview, true);
-                productReview.ValidateUpdate();
+                var product = await productRepository.FindByIdAsync(productReview.ProductId!.Value, true, cancellationToken);
+                if (request.Image is not null)
+                {
+                    string normalizedProductName = product!.Name!.Replace(" ", "_");
+                    string relativePath = "productReviews";
+                    string uploadedFilePath = await fileService.UploadFile(normalizedProductName, request.Image, relativePath);
+                    productReview!.Image = uploadedFilePath;
+                }
                 // Mark productReview as Updated state
                 productReviewRepository.Update(productReview);
                 // Save productReview to database

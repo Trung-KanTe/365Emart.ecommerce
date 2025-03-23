@@ -1,10 +1,8 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.Role;
-using Commerce.Query.Application.UserCases.Role;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Query.Presentation.Service.Role

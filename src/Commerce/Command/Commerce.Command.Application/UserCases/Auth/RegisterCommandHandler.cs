@@ -17,7 +17,7 @@ namespace Commerce.commandApplication.UserCases.Auth
         public string? PasswordHash { get; set; }
         public string? Tel { get; set; }
         public string? Address { get; set; }
-        public Guid? WardId { get; set; }
+        public int? WardId { get; set; }
         public bool? IsDeleted { get; set; } = false;
     }
 

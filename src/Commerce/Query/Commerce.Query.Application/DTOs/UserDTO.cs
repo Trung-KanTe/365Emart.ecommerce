@@ -8,13 +8,12 @@ namespace Commerce.Query.Application.DTOs
         public Guid? Id { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
-        public string? PasswordHash { get; set; }
         public string? Tel { get; set; }
         public string? Address { get; set; }
         public int? WardId { get; set; }
+        public WardFullDTO wards { get; set; }
         public DateTime? InsertedAt { get; set; }
         public bool? IsDeleted { get; set; }
-        public LocalizationFullDTO? LocalizationFullDTO { get; set; }
         public ICollection<Role>? Roles { get; set; }
     }
 }

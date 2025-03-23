@@ -10,6 +10,16 @@
         public const string GET_WEBLOCAL_BY_WARD_IDS_REQUEST_URN = "urn:type.get_weblocal_by_wardids_request";
         public const string GET_WEBLOCAL_BY_WARD_IDS_RESPONSE_URN = "urn:type.get_weblocal_by_wardids_response";
 
+        public const string GET_DETAIL_WEBLOCAL_REQUEST_ENTITY_NAME = "topic.get_detail_weblocal_request";
+        public const string GET_DETAIL_WEBLOCAL_RESPONSE_ENTITY_NAME = "topic.get_detail_weblocal_response";
+        public const string GET_DETAIL_WEBLOCAL_REQUEST_URN = "urn:type.get_detail_weblocal_request";
+        public const string GET_DETAIL_WEBLOCAL_RESPONSE_URN = "urn:type.get_detail_weblocal_response";
+
+        public const string GET_WEBLOCAL_DETAIL_BY_WARD_IDS_REQUEST_ENTITY_NAME = "topic.get_weblocal_detail_by_wardids_request";
+        public const string GET_WEBLOCAL_DETAIL_BY_WARD_IDS_RESPONSE_ENTITY_NAME = "topic.get_weblocal_detail_by_wardids_response";
+        public const string GET_WEBLOCAL_DETAIL_BY_WARD_IDS_REQUEST_URN = "urn:type.get_weblocal_detail_by_wardids_request";
+        public const string GET_WEBLOCAL_DETAIL_BY_WARD_IDS_RESPONSE_URN = "urn:type.get_weblocal_detail_by_wardids_response";
+
         #endregion
 
         #region rabbitMQ

@@ -73,6 +73,8 @@ namespace Commerce.Query.Persistence.DependencyInjection.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddScoped<IWardRepository, WardRepository>();
+            services.AddScoped<IDistrictRepository, DistrictRepository>();
+            services.AddScoped<IProvinceRepository, ProvinceRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPartnerRepository, PartnerRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();

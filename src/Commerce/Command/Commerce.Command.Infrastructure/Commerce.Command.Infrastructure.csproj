@@ -10,5 +10,12 @@
     <ProjectReference Include="..\Commerce.Command.Application\Commerce.Command.Application.csproj" />
     <ProjectReference Include="..\Commerce.Command.Persistence\Commerce.Command.Persistence.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Hangfire" Version="1.8.0" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.0" />
+		<PackageReference Include="MailKit" Version="3.6.0" />
+		<PackageReference Include="MimeKit" Version="3.6.0" />
+		<PackageReference Include="MediatR" Version="12.3.0" />
+	</ItemGroup>
 
 </Project>

@@ -29,6 +29,7 @@ namespace Commerce.Command.Domain.Entities.Product
         /// The comment provided by the user for the product review.
         /// </summary>
         public string? Comment { get; set; }
+        public string? Image { get; set; }
 
         /// <summary>
         /// The date and time when the review was created.

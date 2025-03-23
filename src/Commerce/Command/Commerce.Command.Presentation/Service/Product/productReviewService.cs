@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Product
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.PRODUCT_REVIEW_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class productReviewService : ApiController
     {
         private readonly IMediator mediator;

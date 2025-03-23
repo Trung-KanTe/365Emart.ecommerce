@@ -14,7 +14,7 @@ namespace Commerce.Query.Presentation.Service.ProductReview
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.PRODUCT_REVIEW_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class productReviewService : ApiController
     {
         private readonly IMediator mediator;
@@ -47,9 +47,12 @@ namespace Commerce.Query.Presentation.Service.ProductReview
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
         [HttpGet]
-        public async Task<IActionResult> GetAllProductReviews()
+        public async Task<IActionResult> GetAllProductReviews(Guid? productId)
         {
-            var query = new GetAllProductReviewQuery();
+            var query = new GetAllProductReviewQuery
+            {
+                ProductId = productId
+            };
             var result = await mediator.Send(query);
             return Ok(result);
         }

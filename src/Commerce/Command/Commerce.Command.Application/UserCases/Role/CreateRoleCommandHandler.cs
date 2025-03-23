@@ -13,6 +13,7 @@ namespace Commerce.Command.Application.UserCases.User
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public bool? IsDeleted { get; set; } = true;
     }
 
     /// <summary>

@@ -23,8 +23,8 @@ namespace Commerce.Command.Application.UserCases.User
         public string? Tel { get; set; }
         public string? Address { get; set; }
         public int? WardId { get; set; }
-        public bool? IsDeleted { get; set; } 
-        public ICollection<UserRole>? UserRoles { get; set; }
+        public bool? IsDeleted { get; set; }
+        public List<Guid?>? RoleId { get; set; }
     }
 
     /// <summary>
@@ -66,10 +66,10 @@ namespace Commerce.Command.Application.UserCases.User
                 request.MapTo(user, true);
                 user.ValidateUpdate();
 
-                user.UserRoles = request.UserRoles?.Distinct().Select(roleId => new UserRole
+                user.UserRoles = request.RoleId?.Distinct().Select(roleId => new UserRole
                 {
                     UserId = user.Id,
-                    RoleId = roleId.RoleId,
+                    RoleId = roleId
                 }).ToList() ?? user.UserRoles;
                 // Mark user as Updated state
                 userRepository.Update(user);

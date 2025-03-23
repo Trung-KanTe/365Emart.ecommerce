@@ -18,6 +18,31 @@ namespace Commerce.Command.Domain.Entities.User
         public string? Description { get; set; }
 
         /// <summary>
+        /// Date when the User was created
+        /// </summary>
+        public DateTime? InsertedAt { get; set; }
+
+        /// <summary>
+        /// User ID of the person who created this User
+        /// </summary>
+        public Guid? InsertedBy { get; set; }
+
+        /// <summary>
+        /// Date when the User was last updated
+        /// </summary>
+        public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// User ID of the person who last updated this User
+        /// </summary>
+        public Guid? UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Status indicating if the User is deleted (soft delete)
+        /// </summary>
+        public bool? IsDeleted { get; set; } = true;
+
+        /// <summary>
         /// Implement the Validate method from Entity<Guid>
         /// </summary>
         public override void Validate()

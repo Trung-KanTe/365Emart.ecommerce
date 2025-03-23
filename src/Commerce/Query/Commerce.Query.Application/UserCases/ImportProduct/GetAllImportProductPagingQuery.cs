@@ -80,7 +80,7 @@ namespace Commerce.Query.Application.UserCases.ImportProduct
                     ImportProductDetails = importProduct.ImportProductDetails!.Select(pd => new Entities.ImportProductDetails
                     {
                         Id = pd.Id,
-                        ProductId = pd.ProductId,
+                        ProductDetailId = pd.ProductDetailId,
                         ImportPrice = pd.ImportPrice,
                         Quantity = pd.Quantity,
                         ImportProductId = pd.ImportProductId,

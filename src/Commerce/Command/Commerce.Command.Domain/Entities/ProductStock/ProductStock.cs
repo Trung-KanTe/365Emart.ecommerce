@@ -10,7 +10,7 @@ namespace Commerce.Command.Domain.Entities.ProductStock
         /// <summary>
         /// User Id of ProducStock
         /// </summary>
-        public Guid? ProductId { get; set; }
+        public Guid? ProductDetailId { get; set; }
         public Guid? WareHouseId { get; set; }
         public int? Quantity { get; set; }
 

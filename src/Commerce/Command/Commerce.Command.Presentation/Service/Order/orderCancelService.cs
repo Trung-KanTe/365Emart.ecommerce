@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Order
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.ORDER_CANCEL_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class orderCancelService : ApiController
     {
         private readonly IMediator mediator;

@@ -6,6 +6,7 @@
         public Guid? UserId { get; set; }
         public int? Rating { get; set; }
         public string? Comment { get; set; }
+        public string? Image { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

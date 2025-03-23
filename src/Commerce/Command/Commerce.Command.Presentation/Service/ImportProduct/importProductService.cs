@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.ImportProduct
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.IMPORT_PRODUCT_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class importProductService : ApiController
     {
         private readonly IMediator mediator;

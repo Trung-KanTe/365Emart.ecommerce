@@ -19,7 +19,7 @@
         public const string FIELD_IMPORT_PRODUCT_IS_DELETED = "ip_IsDeleted";
 
         public const string FIELD_IMPORT_PRODUCT_DETAILS_ID = "ipd_Id";
-        public const string FIELD_IMPORT_PRODUCT_DETAILS_PRODUCT_ID = "ipd_ProductId";
+        public const string FIELD_IMPORT_PRODUCT_DETAILS_PRODUCT_ID = "ipd_ProductDetailId";
         public const string FIELD_IMPORT_PRODUCT_DETAILS_IMPORT_PRODUCT_ID = "ipd_ImportProductId";
         public const string FIELD_IMPORT_PRODUCT_DETAILS_IMPORT_PRICE = "ipd_ImportPrice";
         public const string FIELD_IMPORT_PRODUCT_DETAILS_QUANTITY = "ipd_Quantity";
@@ -27,7 +27,7 @@
 
        
         public const string FIELD_PRODUCT_STOCK_ID = "ps_Id";
-        public const string FIELD_PRODUCT_STOCK_PRODUCT_ID = "ps_ProductId";
+        public const string FIELD_PRODUCT_STOCK_PRODUCT_ID = "ps_ProductDetailId";
         public const string FIELD_PRODUCT_STOCK_QUANTITY = "ps_Quantity";
         public const string FIELD_PRODUCT_STOCK_WAREHOUSE_ID = "ps_WareHouseId";
 

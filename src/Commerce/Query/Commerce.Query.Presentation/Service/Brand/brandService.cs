@@ -1,11 +1,9 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.BrandCases.Brand;
 using Commerce.Query.Application.UserCases.Brand;
-using Commerce.Query.Application.UserCases.Brand;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Query.Presentation.Service.Brand
@@ -67,6 +65,19 @@ namespace Commerce.Query.Presentation.Service.Brand
         public async Task<IActionResult> GetAllBrands()
         {
             var query = new GetAllBrandsQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-product")]
+        public async Task<IActionResult> GetAllProductByBrandId([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
+        {
+            var query = new GetAllProductByIdQuery(id, pageNumber, pageSize);
             var result = await mediator.Send(query);
             return Ok(result);
         }

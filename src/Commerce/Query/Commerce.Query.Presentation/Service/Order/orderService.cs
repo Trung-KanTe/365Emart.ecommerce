@@ -53,5 +53,50 @@ namespace Commerce.Query.Presentation.Service.Order
             var result = await mediator.Send(query);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("shop/{userId:guid}")]
+        public async Task<IActionResult> GetAllOrdersOfShop(Guid? userId)
+        {
+            var query = new GetAllOrderOfShopQuery
+            {
+                UserId = userId
+            };
+        
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        [MapToApiVersion(1)]
+        [HttpGet("shop/{userId:guid}/paging")]
+        public async Task<IActionResult> GetAllOrdersOfShopPaging(Guid? userId, int pageNumber = 1)
+        {
+            var query = new GetAllOrderOfShopPagingQuery(pageNumber, userId);
+
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get sample by id
+        /// </summary>
+        /// <param name="id">ID of sample</param>
+        /// <returns>Action result with sample as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("Detail")]
+        public async Task<IActionResult> GetOrdersById(Guid? id)
+        {
+            var query = new GetOrdersByIdQuery
+            {
+                Id = id
+            };
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
     }
 }
