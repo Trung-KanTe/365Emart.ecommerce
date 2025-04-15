@@ -36,7 +36,7 @@ namespace Commerce.Query.Application.UserCases.Partner
         public async Task<Result<List<Entities.Partner>>> Handle(GetAllPartnerQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var partners = partnerRepository.FindAll().ToList();
+            var partners = partnerRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             return await Task.FromResult(partners);
         }
     }

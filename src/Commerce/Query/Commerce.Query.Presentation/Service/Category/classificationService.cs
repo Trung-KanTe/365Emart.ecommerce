@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Commerce.Query.Application.ClassificationCases.Classification;
 using Commerce.Query.Application.UserCases.Classification;
 using Commerce.Query.Application.UserCases.Classification;
 using Commerce.Query.Presentation.Abstractions;
@@ -66,6 +67,19 @@ namespace Commerce.Query.Presentation.Service.Classification
         public async Task<IActionResult> GetAllClassifications()
         {
             var query = new GetAllClassificationsQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchClassification([FromQuery] string name, [FromQuery] int pageNumber = 1)
+        {
+            var query = new SearchClassificationQuery(name, pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

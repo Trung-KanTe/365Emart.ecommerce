@@ -9,6 +9,13 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 // B?t Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
 
 builder.Services.AddOcelot();
 
@@ -23,5 +30,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseOcelot().Wait();
-
+app.UseCors("AllowAll");
 app.Run();

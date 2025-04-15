@@ -36,8 +36,11 @@ namespace Commerce.Query.Application.UserCases.Promotion
         public async Task<Result<List<Entities.Promotion>>> Handle(GetAllPromotionQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var promotions = promotionRepository.FindAll().ToList();
-            return await Task.FromResult(promotions);
+            var now = DateTime.UtcNow; // Use UTC for consistency
+            var activePromotions = promotionRepository.FindAll()
+                                                     .Where(p => p.EndDate.HasValue && p.EndDate >= now)
+                                                     .ToList();
+            return await Task.FromResult(activePromotions);
         }
     }
 }

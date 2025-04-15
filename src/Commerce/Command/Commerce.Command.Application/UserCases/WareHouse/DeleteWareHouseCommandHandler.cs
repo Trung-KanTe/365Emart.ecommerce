@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.WareHouse)) })));
                 }
-                wareHouse.IsDeleted = false;
+                wareHouse.IsDeleted = !wareHouse.IsDeleted;
                 wareHouseRepository.Update(wareHouse);
                 await wareHouseRepository.SaveChangesAsync(cancellationToken);
 

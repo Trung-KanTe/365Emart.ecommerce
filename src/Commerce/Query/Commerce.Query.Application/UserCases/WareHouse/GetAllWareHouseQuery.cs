@@ -36,7 +36,7 @@ namespace Commerce.Query.Application.WareHouseCases.WareHouse
         public async Task<Result<List<Entities.WareHouse>>> Handle(GetAllWareHouseQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var wareHouses = wareHouseRepository.FindAll().ToList();
+            var wareHouses = wareHouseRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             return await Task.FromResult(wareHouses);
         }
     }

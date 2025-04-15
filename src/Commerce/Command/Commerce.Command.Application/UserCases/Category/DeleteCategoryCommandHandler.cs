@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.CategoryCases.Category
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Category)) })));
                 }
-                category.IsDeleted = false;
+                category.IsDeleted = !category.IsDeleted;
                 categoryRepository.Update(category);
                 await categoryRepository.SaveChangesAsync(cancellationToken);
 

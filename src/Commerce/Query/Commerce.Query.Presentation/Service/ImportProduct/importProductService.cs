@@ -67,5 +67,19 @@ namespace Commerce.Query.Presentation.Service.ImportProduct
             var result = await mediator.Send(query);
             return Ok(result);
         }
+
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("userId")]
+        public async Task<IActionResult> GetAllImportProductShopPaging([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
+        {
+            var query = new GetAllImportProductShopPagingQuery(id, pageNumber, pageSize);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

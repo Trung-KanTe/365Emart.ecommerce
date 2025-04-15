@@ -8,11 +8,10 @@ namespace Commerce.Command.Contract.Services
     /// </summary>
     public class FileService : IFileService
     {
-        private readonly string _rootPath = @"E:\KhoaLuan\grpc-angular-app\src\assets\img";
+        private readonly string _rootPath = @"E:\KhoaLuan\365Emart.Commerce\src\Commerce\Query\Commerce.Query.API\UploadFile\Image";
 
         public FileService()
         {
-            // Tạo thư mục lưu trữ nếu chưa tồn tại
             if (!Directory.Exists(_rootPath))
             {
                 Directory.CreateDirectory(_rootPath);
@@ -27,7 +26,6 @@ namespace Commerce.Command.Contract.Services
                 throw new ArgumentException("Invalid file name or content.");
             }
 
-            // Xóa tiền tố "data:image..." nếu có
             var base64Data = Regex.Replace(base64String, @"^data:image\/[a-z]+;base64,", string.Empty);
 
             byte[] fileBytes;
@@ -51,10 +49,8 @@ namespace Commerce.Command.Contract.Services
 
             string filePath = Path.Combine(directoryPath, newFileName);
 
-            // Ghi file vào hệ thống
             await File.WriteAllBytesAsync(filePath, fileBytes);
 
-            // Trả về đường dẫn tương đối
             string relativeFilePath = Path.Combine(relativePath, newFileName).Replace("\\", "/");
             return relativeFilePath;
         }

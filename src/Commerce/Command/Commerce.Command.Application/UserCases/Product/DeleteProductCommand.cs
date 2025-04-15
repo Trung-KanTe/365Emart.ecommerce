@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Product
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Product)) })));
                 }
-                product.IsDeleted = false;
+                product.IsDeleted = !product.IsDeleted;
                 productRepository.Update(product);
                 await productRepository.SaveChangesAsync(cancellationToken);
 

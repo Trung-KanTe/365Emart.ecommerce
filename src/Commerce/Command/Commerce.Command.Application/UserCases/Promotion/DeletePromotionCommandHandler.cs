@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Promotion
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Promotion)) })));
                 }
-                promotion.IsDeleted = false;
+                promotion.IsDeleted = !promotion.IsDeleted;
                 promotionRepository.Update(promotion);
                 await promotionRepository.SaveChangesAsync(cancellationToken);
 

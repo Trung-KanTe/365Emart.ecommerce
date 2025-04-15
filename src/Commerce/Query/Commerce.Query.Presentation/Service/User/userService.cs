@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Commerce.Query.Application.UserCases.User;
+using Commerce.Query.Application.UserCases.User;
 using Commerce.Query.Contract.Shared;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
@@ -69,6 +70,19 @@ namespace Commerce.Query.Presentation.Service.User
             var query = new GetAllUsersQuery(pageNumber);
             var result = await mediator.Send(query);
 
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchUser([FromQuery] string name, [FromQuery] int pageNumber = 1)
+        {
+            var query = new SearchUserQuery(name, pageNumber);
+            var result = await mediator.Send(query);
             return Ok(result);
         }
     }

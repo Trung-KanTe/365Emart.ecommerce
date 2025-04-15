@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.ImportProduct)) })));
                 }
-                importProduct.IsDeleted = false;
+                importProduct.IsDeleted = !importProduct.IsDeleted;
                 importProductRepository.Update(importProduct);
                 await importProductRepository.SaveChangesAsync(cancellationToken);
 

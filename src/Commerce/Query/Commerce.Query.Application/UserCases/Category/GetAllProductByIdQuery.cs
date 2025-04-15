@@ -52,7 +52,7 @@ namespace Commerce.Query.Application.UserCases.Category
             var paginatedProducts = await productRepository.GetPaginatedResultAsync(
                  request.PageNumber,
                  request.PageSize,
-                 predicate: product => product.CategoryId == request.Id, // Lọc theo BrandId
+                 predicate: product => product.CategoryId == request.Id && product.IsDeleted == true, 
                  isTracking: false,
                  includeProperties: p => p.ProductDetails!
              );

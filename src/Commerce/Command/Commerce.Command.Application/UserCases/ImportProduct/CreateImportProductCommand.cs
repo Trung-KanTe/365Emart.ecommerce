@@ -16,6 +16,7 @@ namespace Commerce.Command.Application.UserCases.ImportProduct
     public record CreateImportProductCommand : IRequest<Result<Entities.ImportProduct>>
     {
         public Guid? PartnerId { get; set; }
+        public Guid? ShopId { get; set; }
         public Guid? WareHouseId { get; set; }
         public string? Note { get; set; }
         public bool? IsDeleted { get; set; } = true;

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Commerce.Query.Presentation\Commerce.Query.Presentation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UploadFile\Image\" />
+  </ItemGroup>
+
 </Project>

@@ -7,6 +7,7 @@ using Commerce.Query.Contract.DependencyInjection.Extensions;
 using Commerce.Query.Persistence.DependencyInjection.Extensions;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Common;
+using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,6 +60,22 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseApiLayerSwagger();
+var uploadFolderPath = Path.Combine(builder.Environment.ContentRootPath, "UploadFile", "Image");
+
+// In ra ???ng d?n th?c t? c?a th? m?c ?nh
+Console.WriteLine($"Serving static files from: {uploadFolderPath}");
+
+if (!Directory.Exists(uploadFolderPath))
+{
+    Directory.CreateDirectory(uploadFolderPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadFolderPath),
+    RequestPath = "/images",
+    ServeUnknownFileTypes = true, 
+});
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
 app.UseCors("AllowAll");

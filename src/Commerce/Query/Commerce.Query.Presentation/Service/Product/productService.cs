@@ -113,5 +113,31 @@ namespace Commerce.Query.Presentation.Service.Product
             var result = await mediator.Send(query);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProduct([FromQuery] Guid? id, [FromQuery] string name, [FromQuery] int pageNumber)
+        {
+            var query = new SearchProductQuery(id, name, pageNumber);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("searchAll")]
+        public async Task<IActionResult> SearchAllProduct([FromQuery] string name)
+        {
+            var query = new SearchAllProductQuery(name);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

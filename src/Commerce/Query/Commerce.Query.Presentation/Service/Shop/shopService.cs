@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Commerce.Query.Application.ShopCases.Shop;
 using Commerce.Query.Application.UserCases.Shop;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
@@ -88,6 +89,97 @@ namespace Commerce.Query.Presentation.Service.Shop
         public async Task<IActionResult> GetAllProductByUserId([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
         {
             var query = new GetAllProductByUserIdQuery(id, pageNumber, pageSize);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("revenue")]
+        public async Task<IActionResult> GetRevenueByUserId([FromQuery] Guid? id)
+        {
+            var query = new GetRevenueByUserIdQuery(id);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("best-seller")]
+        public async Task<IActionResult> GetBestSellerByUserId([FromQuery] Guid? id)
+        {
+            var query = new GetBestSellerByUserIdQuery(id);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("inventory")]
+        public async Task<IActionResult> GetInventoryByUserId([FromQuery] Guid? id)
+        {
+            var query = new GetInventoryByUserIdQuery(id);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-revenue")]
+        public async Task<IActionResult> GetAllRevenue()
+        {
+            var query = new GetAllRevenueQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-best-seller")]
+        public async Task<IActionResult> GetAllBestSeller()
+        {
+            var query = new GetAllBestSellerQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("all-inventory")]
+        public async Task<IActionResult> GetAllInventory()
+        {
+            var query = new GetAllInventoryQuery();
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchShop([FromQuery] string name, [FromQuery] int pageNumber = 1)
+        {
+            var query = new SearchShopQuery(name, pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

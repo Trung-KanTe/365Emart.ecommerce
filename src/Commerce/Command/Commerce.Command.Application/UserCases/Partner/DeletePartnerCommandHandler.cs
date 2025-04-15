@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Partner
                 {
                     return Result.Failure(StatusCode.NotFound, new Error( ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Partner)) })));
                 }
-                partner.IsDeleted = false;
+                partner.IsDeleted = !partner.IsDeleted;
                 partnerRepository.Update(partner);
                 await partnerRepository.SaveChangesAsync(cancellationToken);
 

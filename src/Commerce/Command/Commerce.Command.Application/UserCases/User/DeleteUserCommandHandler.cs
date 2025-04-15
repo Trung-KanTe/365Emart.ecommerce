@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.User
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.User)) })));
                 }
-                user.IsDeleted = false;
+                user.IsDeleted = !user.IsDeleted;
                 userRepository.Update(user);
                 await userRepository.SaveChangesAsync(cancellationToken);
 

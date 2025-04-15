@@ -19,6 +19,8 @@ namespace Commerce.Query.Domain.Entities.ImportProduct
         /// </summary>
         public Guid? PartnerId { get; set; }
 
+        public Guid? ShopId { get; set; }
+
         /// <summary>
         /// Warehouse ID where the product is stored.
         /// </summary>

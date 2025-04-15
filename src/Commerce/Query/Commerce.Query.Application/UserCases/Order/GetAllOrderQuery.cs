@@ -3,6 +3,7 @@ using Commerce.Query.Contract.DependencyInjection.Extensions;
 using Commerce.Query.Contract.Shared;
 using Commerce.Query.Domain.Abstractions.Repositories.Order;
 using Commerce.Query.Domain.Abstractions.Repositories.Product;
+using Commerce.Query.Domain.Abstractions.Repositories.Shop;
 using MediatR;
 using Entities = Commerce.Query.Domain.Entities.Order;
 
@@ -21,6 +22,7 @@ namespace Commerce.Query.Application.UserCases.Order
     /// </summary>
     public class GetAllOrderQueryHandler : IRequestHandler<GetAllOrderQuery, Result<List<OrderDTO>>>
     {
+        private readonly IShopRepository shopRepository;
         private readonly IOrderRepository orderRepository;
         private readonly IOrderItemRepository orderItemRepository;
         private readonly IProductRepository productRepository;
@@ -29,8 +31,9 @@ namespace Commerce.Query.Application.UserCases.Order
         /// <summary>
         /// Handler for get all order request
         /// </summary>
-        public GetAllOrderQueryHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IProductRepository productRepository, IProductDetailRepository productDetailRepository)
+        public GetAllOrderQueryHandler(IShopRepository shopRepository, IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IProductRepository productRepository, IProductDetailRepository productDetailRepository)
         {
+            this.shopRepository = shopRepository;
             this.orderRepository = orderRepository;
             this.productRepository = productRepository;
             this.productDetailRepository = productDetailRepository;
@@ -52,7 +55,7 @@ namespace Commerce.Query.Application.UserCases.Order
 
             foreach (var order in orders)
             {
-                OrderDTO orderDto = order.MapTo<OrderDTO>()!;
+                OrderDTO orderDto = order.MapTo<OrderDTO>()!;              
                 var orderItems = orderItemRepository.FindAll(x => x.OrderId == orderDto.Id)
                     .ToList()
                     .Select(x => x.MapTo<OrderItemDTO>()!)
@@ -76,6 +79,9 @@ namespace Commerce.Query.Application.UserCases.Order
                                 orderItem.ProductDescription = product.Description;
                                 orderItem.ProductImage = product.Image;
                             }
+
+                            var shop = await shopRepository.FindSingleAsync(x => x.Id == product.ShopId);
+                            orderDto.ShopName = shop.Name;
 
                             // Lấy danh sách ProductDetail theo ProductId
                             var productDet = await productDetailRepository.FindByIdAsync(orderItem.ProductDetailId.Value, true, cancellationToken);

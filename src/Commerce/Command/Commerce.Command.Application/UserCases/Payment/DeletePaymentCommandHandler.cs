@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Payment
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Payment)) })));
                 }
-                payment.IsDeleted = false;
+                payment.IsDeleted = !payment.IsDeleted;
                 paymentRepository.Update(payment);
                 await paymentRepository.SaveChangesAsync(cancellationToken);
 

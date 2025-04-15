@@ -40,7 +40,7 @@ namespace Commerce.Query.Application.UserCases.Product
         public async Task<Result<List<ProductDTO>>> Handle(GetAllProductQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var products = productRepository.FindAll().ToList();
+            var products = productRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             List<ProductDTO> orderDtos = products.Select(order =>
             {
                 ProductDTO orderDto = order.MapTo<ProductDTO>()!;

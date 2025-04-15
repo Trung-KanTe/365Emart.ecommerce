@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Order
                 {
                     return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.OrderCancel)) })));
                 }
-                orderCancel.IsDeleted = false;
+                orderCancel.IsDeleted = !orderCancel.IsDeleted;
                 orderCancelRepository.Update(orderCancel);
                 await orderCancelRepository.SaveChangesAsync(cancellationToken);
 

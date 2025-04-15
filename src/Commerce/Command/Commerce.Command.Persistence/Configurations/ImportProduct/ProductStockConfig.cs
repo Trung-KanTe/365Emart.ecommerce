@@ -15,7 +15,7 @@ namespace Commerce.Command.Persistence.Configurations.ImportProduct
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName(ImportProductConst.FIELD_PRODUCT_STOCK_ID);
 
-            builder.Property(x => x.ProductId)
+            builder.Property(x => x.ProductDetailId)
                 .HasColumnName(ImportProductConst.FIELD_PRODUCT_STOCK_PRODUCT_ID)
                 .IsRequired();
 

@@ -56,7 +56,7 @@ namespace Commerce.Command.Application.UserCases.Classification
                 {
                     return Result.Failure(StatusCode.NotFound, new Error( ErrorType.NotFound, ErrCodeConst.NOT_FOUND, MessConst.NOT_FOUND.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.Classification)) })));
                 }
-                classification.IsDeleted = false;
+                classification.IsDeleted = !classification.IsDeleted;
                 classificationRepository.Update(classification);
                 await classificationRepository.SaveChangesAsync(cancellationToken);
 

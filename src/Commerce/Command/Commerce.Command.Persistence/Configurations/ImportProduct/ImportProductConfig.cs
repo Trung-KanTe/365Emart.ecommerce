@@ -19,6 +19,10 @@ namespace Commerce.Command.Persistence.Configurations.ImportProduct
                 .HasColumnName(ImportProductConst.FIELD_IMPORT_PRODUCT_PARTNER_ID)
                 .IsRequired();
 
+            builder.Property(x => x.ShopId)
+              .HasColumnName(ImportProductConst.FIELD_IMPORT_PRODUCT_SHOP_ID)
+              .IsRequired();
+
             builder.Property(x => x.WareHouseId)
                 .HasColumnName(ImportProductConst.FIELD_IMPORT_PRODUCT_WAREHOUSE_ID);
 

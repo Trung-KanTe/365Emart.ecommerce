@@ -81,5 +81,18 @@ namespace Commerce.Query.Presentation.Service.Brand
             var result = await mediator.Send(query);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchBrand([FromQuery] string name, [FromQuery] int pageNumber = 1)
+        {
+            var query = new SearchBrandQuery(name, pageNumber);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

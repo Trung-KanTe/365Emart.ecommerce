@@ -36,7 +36,7 @@ namespace Commerce.Query.Application.UserCases.Category
         public async Task<Result<List<Entities.Category>>> Handle(GetAllCategorysQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var categorys = categoryRepository.FindAll().ToList();
+            var categorys = categoryRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             return await Task.FromResult(categorys);
         }
     }

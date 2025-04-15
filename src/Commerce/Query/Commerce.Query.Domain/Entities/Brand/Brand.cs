@@ -1,7 +1,4 @@
-﻿using Commerce.Query.Contract.DependencyInjection.Extensions;
-using Commerce.Query.Contract.Validators;
-using Commerce.Query.Domain.Abstractions.Aggregates;
-using Commerce.Query.Domain.Constants.Brand;
+﻿using Commerce.Query.Domain.Abstractions.Aggregates;
 
 namespace Commerce.Query.Domain.Entities.Brand
 {

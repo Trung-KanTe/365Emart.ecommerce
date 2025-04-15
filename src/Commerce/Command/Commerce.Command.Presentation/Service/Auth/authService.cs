@@ -35,7 +35,6 @@ namespace Commerce.Command.Presentation.Service.Auth
         [HttpPost]
         public async Task<IActionResult> Login(LoginCommand command)
         {
-            Console.WriteLine($"Login - Email: {command.Email}");
             var result = await mediator.Send(command);
             return Ok(result);
         }

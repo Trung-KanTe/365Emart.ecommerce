@@ -1,0 +1,110 @@
+﻿using Commerce.Query.Application.DTOs.Shop;
+using Commerce.Query.Contract.Shared;
+using Commerce.Query.Domain.Abstractions.Repositories.Order;
+using Commerce.Query.Domain.Abstractions.Repositories.Product;
+using Commerce.Query.Domain.Abstractions.Repositories.Shop;
+using MediatR;
+
+namespace Commerce.Query.Application.UserCases.Shop
+{
+    /// <summary>
+    /// Request to get brand by id
+    /// </summary>
+    public record GetBestSellerByUserIdQuery : IRequest<Result<BestSellerDTO>>
+    {
+        public Guid? Id { get; init; }
+
+        public GetBestSellerByUserIdQuery(Guid? id)
+        {
+            Id = id;
+        }
+    }
+
+    /// <summary>
+    /// Handler for get brand by id request
+    /// </summary>
+    /// <summary>
+    /// Handle request
+    /// </summary>
+    /// <param name="request">Request to handle</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Result with brand data</returns>
+    public class GetBestSellerByUserIdQueryHandler : IRequestHandler<GetBestSellerByUserIdQuery, Result<BestSellerDTO>>
+    {
+        private readonly IProductRepository productRepository;
+        private readonly IProductDetailRepository productDetailRepository;
+        private readonly IOrderCancelRepository orderCancelRepository;
+        private readonly IOrderRepository orderRepository;
+        private readonly IShopRepository shopRepository;
+        private readonly IOrderItemRepository orderItemRepository;
+
+        public GetBestSellerByUserIdQueryHandler(IProductRepository productRepository, IOrderCancelRepository orderCancelRepository,
+            IOrderRepository orderRepository, IProductDetailRepository productDetailRepository, IShopRepository shopRepository, IOrderItemRepository orderItemRepository)
+        {
+            this.productRepository = productRepository;
+            this.orderCancelRepository = orderCancelRepository;
+            this.orderRepository = orderRepository;
+            this.productDetailRepository = productDetailRepository;
+            this.shopRepository = shopRepository;
+            this.orderItemRepository = orderItemRepository;
+        }
+
+        public async Task<Result<BestSellerDTO>> Handle(GetBestSellerByUserIdQuery request, CancellationToken cancellationToken)
+        {
+            var shop = await shopRepository.FindSingleAsync(x => x.UserId == request.Id, true, cancellationToken);
+
+            var products = productRepository.FindAll(x => x.ShopId == shop.Id, true, x => x.ProductDetails!).ToList();
+            var productDetailIds = products.SelectMany(p => p.ProductDetails!).Select(pd => pd.Id).ToList();
+
+            // Lấy tất cả order items có liên quan đến sản phẩm
+            var orderItems = orderItemRepository.FindAll(oi => productDetailIds.Contains(oi.ProductDetailId.Value), true).ToList();
+
+            var orderIds = orderItems.Select(oi => oi.OrderId).Distinct().ToList();
+            var orders = orderRepository.FindAll(o => orderIds.Contains(o.Id), true).ToList();
+
+            var totalOrders = orders.Count;
+            var totalRevenue = (int)orders.Sum(o => o.TotalAmount ?? 0);
+
+            // Tính toán số lượng đơn hàng và doanh thu theo sản phẩm
+            var productSales = orderItems
+                .GroupBy(oi => oi.ProductDetailId)
+                .Select(g => new
+                {
+                    ProductDetailId = g.Key,
+                    OrderCount = g.Count(),
+                    TotalAmount = g.Sum(oi => oi.Total)
+                })
+                .ToList();
+
+            // Chỉ lấy các sản phẩm có trong orderItems
+            var productSellerList = products
+                .SelectMany(p => p.ProductDetails!
+                    .Where(pd => productSales.Any(ps => ps.ProductDetailId == pd.Id)) // Chỉ lấy sản phẩm có đơn hàng
+                    .Select(pd =>
+                    {
+                        var sales = productSales.First(s => s.ProductDetailId == pd.Id);
+                        return new ProductSellerDTO
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            Description = p.Description,
+                            Image = p.Image,
+                            OrderCount = sales.OrderCount,
+                            TotalAmount = sales.TotalAmount
+                        };
+                    }))
+                .OrderByDescending(p => p.OrderCount)
+                .ToList();
+
+            var bestSellerDto = new BestSellerDTO
+            {
+                TotalOrder = totalOrders,
+                TotalRevenue = totalRevenue,
+                Products = productSellerList
+            };
+
+            return bestSellerDto;
+        }
+
+    }
+}

@@ -16,8 +16,6 @@ namespace Commerce.Command.Application.UserCases.User
     public record UserUpdatePasswordCommand : IRequest<Result>
     {
         public Guid? Id { get; set; }
-        public string? OldPasswordHash { get; set; }
-        public string? NewPasswordHash { get; set; }
     }
 
     /// <summary>
@@ -26,15 +24,13 @@ namespace Commerce.Command.Application.UserCases.User
     public class UserUpdatePasswordCommandHandler : IRequestHandler<UserUpdatePasswordCommand, Result>
     {
         private readonly IUserRepository userRepository;
-        private readonly IPasswordHasher<Entities.User> passwordHasher;
 
         /// <summary>
         /// Handler for delete user request
         /// </summary>
-        public UserUpdatePasswordCommandHandler(IUserRepository userRepository, IPasswordHasher<Entities.User> passwordHasher)
+        public UserUpdatePasswordCommandHandler(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-            this.passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -49,29 +45,8 @@ namespace Commerce.Command.Application.UserCases.User
             try
             {
                 // Lấy user từ DB
-                var user = await userRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);
-                if (user == null)
-                {
-                    return Result.Failure(StatusCode.NotFound, new Error(ErrorType.NotFound, ErrCodeConst.NOT_FOUND, "User not found"));
-                }
+                var user = await userRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);                      
 
-                // Kiểm tra mật khẩu cũ
-                if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.OldPasswordHash!) != PasswordVerificationResult.Success)
-                {
-                    return Result.Failure(StatusCode.Conflict, new Error(ErrorType.Conflict, ErrCodeConst.CONFLICT, MessConst.MSG_LOGIN.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.User)) })));
-                }
-
-                // Hash mật khẩu mới trước khi lưu vào DB
-                user.PasswordHash = "AQAAAAIAAYagAAAAEHM2GmbSC0rYxGTYnnckBdV2WkzbFmnw2S7frpmMXsuJb8Nbn3Qu7DvP3kXiCTYEog==";
-
-                // Cập nhật mật khẩu
-                userRepository.Update(user);
-
-                // Lưu vào database
-                await userRepository.SaveChangesAsync(cancellationToken);
-
-                // Commit transaction
-                transaction.Commit();
                 return Result.Ok();
             }
             catch (Exception)

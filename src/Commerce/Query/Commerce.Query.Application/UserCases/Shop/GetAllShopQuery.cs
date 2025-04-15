@@ -36,7 +36,7 @@ namespace Commerce.Query.Application.UserCases.Shop
         public async Task<Result<List<Entities.Shop>>> Handle(GetAllShopQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var shops = shopRepository.FindAll().ToList();
+            var shops = shopRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             return await Task.FromResult(shops);
         }
     }

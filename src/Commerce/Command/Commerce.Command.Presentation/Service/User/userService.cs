@@ -108,15 +108,12 @@ namespace Commerce.Command.Presentation.Service.User
         }
 
         [HttpPut("password")]
-        public async Task<IActionResult> UpdateUserPassword(Guid? id, [FromBody] UpdateUserPasswordDTO request)
+        public async Task<IActionResult> UpdateUserPassword(Guid? id)
         {
             var command = new UserUpdatePasswordCommand
             {
-                Id = id,
+                Id = id,            
             };
-            request.MapTo(command, true);
-            Entities.User user = new Entities.User();
-            command.NewPasswordHash = passwordHasher.HashPassword(user, command.NewPasswordHash!);
             var result = await mediator.Send(command);
             return Ok(result);
         }
@@ -140,16 +137,13 @@ namespace Commerce.Command.Presentation.Service.User
         /// <param name="request">Request body contains content to update</param>
         /// <returns></returns>
         [HttpPut("reset-password")]
-        public async Task<IActionResult> ResetPassword(Guid? id, [FromBody] UpdateUserRequestDTO request)
+        public async Task<IActionResult> ResetPassword(Guid? id)
         {
             var command = new ResetPasswordCommand
             {
                 Id = id,
 
             };
-            request.MapTo(command, true);
-            Entities.User user = new Entities.User();
-            command.PasswordHash = passwordHasher.HashPassword(user, command.PasswordHash!);
             var result = await mediator.Send(command);
             return Ok(result);
         }

@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Commerce.Query.Application.CategoryCases.Category;
 using Commerce.Query.Application.UserCases.Category;
 using Commerce.Query.Presentation.Abstractions;
 using Commerce.Query.Presentation.Constants;
@@ -75,6 +76,19 @@ namespace Commerce.Query.Presentation.Service.Category
         public async Task<IActionResult> GetAllProductByCategoryId([FromQuery] Guid? id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 8)
         {
             var query = new GetAllProductByIdQuery(id, pageNumber, pageSize);
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Api version 1 for get all samples
+        /// </summary>
+        /// <returns>Action result with list of samples as data</returns>
+        [MapToApiVersion(1)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchCategory([FromQuery] string name, [FromQuery] int pageNumber = 1)
+        {
+            var query = new SearchCategoryQuery(name, pageNumber);
             var result = await mediator.Send(query);
             return Ok(result);
         }

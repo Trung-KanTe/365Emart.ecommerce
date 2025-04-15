@@ -42,11 +42,6 @@ namespace Commerce.Command.Application.UserCases.User
                 // Need tracking to delete user
                 var user = await userRepository.FindByIdAsync(request.Id.Value, true, cancellationToken);
                
-                user.PasswordHash = request.PasswordHash;
-                // Mark user as Updated state
-                userRepository.Update(user);
-                // Save user to database
-                await userRepository.SaveChangesAsync(cancellationToken);
                 // Commit transaction
                 transaction.Commit();
                 return Result.Ok();

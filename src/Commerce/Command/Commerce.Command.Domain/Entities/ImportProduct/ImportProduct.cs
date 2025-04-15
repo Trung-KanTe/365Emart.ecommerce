@@ -24,6 +24,8 @@ namespace Commerce.Command.Domain.Entities.ImportProduct
         /// </summary>
         public Guid? WareHouseId { get; set; }
 
+        public Guid? ShopId { get; set; }
+
         /// <summary>
         /// Date of import.
         /// </summary>

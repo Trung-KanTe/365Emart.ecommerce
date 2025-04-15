@@ -16,7 +16,7 @@ namespace Commerce.Command.Application.UserCases.User
     /// </summary>
     public record LoginCommand : IRequest<Result<AuthResult>>
     {
-        public string? Email { get; set; }
+        public string? UserName { get; set; }
         public string? Password { get; set; }
     }
 
@@ -52,7 +52,7 @@ namespace Commerce.Command.Application.UserCases.User
             // Create new User from request
             Entities.User? user = request.MapTo<Entities.User>();
             // Begin transaction
-            user = await userRepository.FindSingleAsync(x => x.Email == request.Email, true, cancellationToken, includeProperties: x => x.UserRoles!);
+            user = await userRepository.FindSingleAsync(x => x.Email == request.UserName || x.Tel == request.UserName, true, cancellationToken, includeProperties: x => x.UserRoles!);
             if (user == null || passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, request.Password!) != PasswordVerificationResult.Success)
             {
                 return Result.Failure(StatusCode.Conflict, new Error(ErrorType.Conflict, ErrCodeConst.CONFLICT, MessConst.MSG_LOGIN.FillArgs(new List<MessageArgs> { new MessageArgs(Args.TABLE_NAME, nameof(Entities.User)) })));

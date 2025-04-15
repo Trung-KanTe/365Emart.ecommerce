@@ -36,7 +36,7 @@ namespace Commerce.Query.Application.UserCases.Brand
         public async Task<Result<List<Entities.Brand>>> Handle(GetAllBrandsQuery request,
                                                        CancellationToken cancellationToken)
         {
-            var brands = brandRepository.FindAll().ToList();
+            var brands = brandRepository.FindAll().Where(p => p.IsDeleted == true).ToList();
             return await Task.FromResult(brands);
         }
     }

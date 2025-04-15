@@ -97,5 +97,12 @@ namespace Commerce.Command.Presentation.Service.Order
             var result = await mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost("buy-back")]
+        public async Task<IActionResult> CreateOrderBuyBack(CreateOrderBuyBackCommand command)
+        {
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
     }
 }
