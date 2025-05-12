@@ -49,5 +49,17 @@
         public const int PRODUCT_PRICE_DECIMALS = 2;
 
         public const string INVALID_GUID = "{0} is invalid guid.";
+
+       
+        public const string TABLE_PRODUCT_REVIEW_REPLY = "ProductReviewReply";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_ID = "prr_Id";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_REVIEW_ID = "prr_ReviewId";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_SHOP_ID = "prr_ShopId";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_REPLY = "prr_Reply";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_INSERTED_AT = "prr_InsertedAt";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_INSERTED_BY = "prr_InsertedBy";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_UPDATED_AT = "prr_UpdatedAt";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_UPDATED_BY = "prr_UpdatedBy";
+        public const string FIELD_PRODUCT_REVIEW_REPLY_IS_DELETED = "prr_IsDeleted";
     }
 }

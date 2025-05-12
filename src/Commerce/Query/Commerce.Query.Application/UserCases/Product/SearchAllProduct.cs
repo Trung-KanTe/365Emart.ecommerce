@@ -33,17 +33,20 @@ namespace Commerce.Query.Application.UserCases.Product
         private readonly ICategoryRepository categoryRepository;
         private readonly IBrandRepository brandRepository;
         private readonly IShopRepository shopRepository;
+        private readonly IProductReviewRepository productReviewRepository;
 
         public SearchAllProductQueryHandler(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
             IBrandRepository brandRepository,
-            IShopRepository shopRepository)
+            IShopRepository shopRepository,
+            IProductReviewRepository productReviewRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.brandRepository = brandRepository;
             this.shopRepository = shopRepository;
+            this.productReviewRepository = productReviewRepository;
         }
 
         public async Task<Result<SearchAll>> Handle(SearchAllProductQuery request, CancellationToken cancellationToken)
@@ -52,21 +55,37 @@ namespace Commerce.Query.Application.UserCases.Product
             int pageSize = 20;
             string searchTerm = request.Name?.Trim().ToLower()!;
 
-            // Tìm kiếm sản phẩm theo tên tương đối
             Expression<Func<Entities.Product, bool>> predicate = p =>
                 string.IsNullOrEmpty(searchTerm) || p.Name.ToLower().Contains(searchTerm);
 
-            var paginatedProducts = await productRepository.GetPaginatedResultAsync(
-                pageNumber,
-                pageSize,
-                predicate,
-                isTracking: false,
-                includeProperties: p => p.ProductDetails!
-            );
+            var allMatchedProducts = (productRepository.FindAll(
+                includeProperties: x => x.ProductDetails!
+            )).Where(predicate.Compile()).ToList(); 
+
+            var allReviews = productReviewRepository.FindAll();
+            var reviewCounts = allReviews
+                .GroupBy(r => r.ProductId)!
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var productWithReviewCounts = allMatchedProducts
+                .Select(p => new
+                {
+                    Product = p,
+                    ReviewCount = reviewCounts.ContainsKey(p.Id) ? reviewCounts[p.Id] : 0
+                })
+                .ToList();
+
+            var sortedProducts = productWithReviewCounts
+                .OrderByDescending(x => x.ReviewCount)
+                .ThenBy(x => Guid.NewGuid())
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => x.Product)
+                .ToList();
 
             var productDTOs = new List<ProductDTO>();
 
-            foreach (var product in paginatedProducts.Items)
+            foreach (var product in sortedProducts)
             {
                 var category = await categoryRepository.FindByIdAsync(product.CategoryId!.Value, true, cancellationToken);
                 var brand = await brandRepository.FindByIdAsync(product.BrandId!.Value, true, cancellationToken);
@@ -98,14 +117,12 @@ namespace Commerce.Query.Application.UserCases.Product
                 productDTOs.Add(productDTO);
             }
 
-            // Tìm Brand nếu trùng khớp chính xác tên
+            // Tìm Brand nếu trùng khớp tên chính xác
             var matchedBrand = await brandRepository.FindSingleAsync(b => b.Name.ToLower() == searchTerm, true, cancellationToken);
-
             BrandDTO? brandDTO = matchedBrand.MapTo<BrandDTO>();
 
-            // Tìm Shop nếu trùng khớp chính xác tên
-            var matchedShop = await shopRepository.FindSingleAsync(b => b.Name.ToLower() == searchTerm, true, cancellationToken);
-
+            // Tìm Shop nếu trùng khớp tên chính xác
+            var matchedShop = await shopRepository.FindSingleAsync(s => s.Name.ToLower() == searchTerm, true, cancellationToken);
             ShopDTO? shopDTO = matchedShop.MapTo<ShopDTO>();
 
             var result = new SearchAll

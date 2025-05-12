@@ -19,10 +19,17 @@
         {
           "Host": "localhost",
           "Port": 7149
+        },
+        {
+          "Host": "localhost",
+          "Port": 7150
         }
       ],
       "UpstreamPathTemplate": "/command/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
     },
     {
       "DownstreamPathTemplate": "/{everything}",
@@ -37,7 +44,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     }
   ],
-
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:5000"
   }

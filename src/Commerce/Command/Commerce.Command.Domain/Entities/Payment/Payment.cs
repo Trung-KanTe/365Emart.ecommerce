@@ -1,15 +1,4 @@
-﻿using Commerce.Command.Contract.DependencyInjection.Extensions;
-using Commerce.Command.Contract.Validators;
-using Commerce.Command.Domain.Abstractions.Aggregates;
-using Commerce.Command.Domain.Constants.Partner;
-using Commerce.Command.Domain.Constants.Payment;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using Commerce.Command.Domain.Abstractions.Aggregates;
 
 namespace Commerce.Command.Domain.Entities.Payment
 {
@@ -31,7 +20,7 @@ namespace Commerce.Command.Domain.Entities.Payment
         /// <summary>
         /// Transaction ID for the Payment.
         /// </summary>
-        public long? TransactionId { get; set; }
+        public string? TransactionId { get; set; }
 
         /// <summary>
         /// Payment method used for the Payment.

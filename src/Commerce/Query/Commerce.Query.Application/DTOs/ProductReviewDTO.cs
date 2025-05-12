@@ -1,4 +1,6 @@
-﻿namespace Commerce.Query.Application.DTOs
+﻿using Commerce.Command.Domain.Entities.Product;
+
+namespace Commerce.Query.Application.DTOs
 {
     public class ProductReviewDTO
     {
@@ -10,6 +12,7 @@
         public string? Image { get; set; }
         public DateTime? InsertedAt { get; set; }
         public UserDTO User { get; set; }
+        public ProductReviewReply ProductReviewReply { get; set; }
 
     }
 }

@@ -1,4 +1,6 @@
-﻿using Commerce.Query.Domain.Abstractions.Repositories;
+﻿using Commerce.Command.Domain.Abstractions.Repositories.Product;
+using Commerce.Command.Persistence.Repositories.Product;
+using Commerce.Query.Domain.Abstractions.Repositories;
 using Commerce.Query.Domain.Abstractions.Repositories.Brand;
 using Commerce.Query.Domain.Abstractions.Repositories.Cart;
 using Commerce.Query.Domain.Abstractions.Repositories.Category;
@@ -11,6 +13,7 @@ using Commerce.Query.Domain.Abstractions.Repositories.Promotion;
 using Commerce.Query.Domain.Abstractions.Repositories.Settings;
 using Commerce.Query.Domain.Abstractions.Repositories.Shop;
 using Commerce.Query.Domain.Abstractions.Repositories.User;
+using Commerce.Query.Domain.Abstractions.Repositories.Wallets;
 using Commerce.Query.Domain.Abstractions.Repositories.Ward;
 using Commerce.Query.Domain.Abstractions.Repositories.WareHouse;
 using Commerce.Query.Domain.Entities.User;
@@ -92,12 +95,17 @@ namespace Commerce.Query.Persistence.DependencyInjection.Extensions
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
+            services.AddScoped<IProductReviewReplyRepository, ProductReviewReplyRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderCancelRepository, OrderCancelRepository>();
             services.AddScoped<IPromotionRepository, PromotionRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentDetailRepository, PaymentDetailRepository>();
+            services.AddScoped<IShopWalletRepository, ShopWalletRepository>();
+            services.AddScoped<IShopWalletTransactionRepository, ShopWalletTransactionRepository>();
+            services.AddScoped<IPlatformWalletRepository, PlatformWalletRepository>();
+            services.AddScoped<IPlatformWalletTransactionRepository, PlatformWalletTransactionRepository>();
             return services;
         }
     }

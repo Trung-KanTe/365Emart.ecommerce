@@ -32,7 +32,7 @@ namespace Commerce.Command.Presentation.Service.Order
         /// <param name="command">Request to create order</param>
         /// <returns>Action result</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(CreateOrderCommand command)
+        public async Task<IActionResult> CreateOrder(CreateOrderUpdateCommand command)
         {
             var result = await mediator.Send(command);
             return Ok(result);

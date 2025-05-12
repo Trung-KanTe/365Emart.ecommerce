@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.Shop
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.SHOP_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class shopService : ApiController
     {
         private readonly IMediator mediator;

@@ -1,0 +1,6 @@
+@Commerce.Command.ApiLB_HostAddress = http://localhost:5256
+
+GET {{Commerce.Command.ApiLB_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

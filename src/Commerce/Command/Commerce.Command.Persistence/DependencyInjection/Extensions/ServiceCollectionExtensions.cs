@@ -12,6 +12,7 @@ using Commerce.Command.Domain.Abstractions.Repositories.Promotion;
 using Commerce.Command.Domain.Abstractions.Repositories.Settings;
 using Commerce.Command.Domain.Abstractions.Repositories.Shop;
 using Commerce.Command.Domain.Abstractions.Repositories.User;
+using Commerce.Command.Domain.Abstractions.Repositories.Wallets;
 using Commerce.Command.Domain.Abstractions.Repositories.WareHouse;
 using Commerce.Command.Domain.Entities.User;
 using Commerce.Command.Persistence.DependencyInjection.Options;
@@ -86,10 +87,15 @@ namespace Commerce.Command.Persistence.DependencyInjection.Extensions
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
+            services.AddScoped<IProductReviewReplyRepository, ProductReviewReplyRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderCancelRepository, OrderCancelRepository>();
             services.AddScoped<IPromotionRepository, PromotionRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IShopWalletRepository, ShopWalletRepository>();
+            services.AddScoped<IShopWalletTransactionRepository, ShopWalletTransactionRepository>();
+            services.AddScoped<IPlatformWalletRepository, PlatformWalletRepository>();
+            services.AddScoped<IPlatformWalletTransactionRepository, PlatformWalletTransactionRepository>();
             return services;
         }
     }

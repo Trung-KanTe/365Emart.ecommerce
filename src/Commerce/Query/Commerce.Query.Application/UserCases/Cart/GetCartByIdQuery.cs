@@ -4,11 +4,8 @@ using Commerce.Query.Contract.Shared;
 using Commerce.Query.Contract.Validators;
 using Commerce.Query.Domain.Abstractions.Repositories.Cart;
 using Commerce.Query.Domain.Abstractions.Repositories.Product;
-using Commerce.Query.Domain.Entities.Product;
+using Commerce.Query.Domain.Abstractions.Repositories.Shop;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Entities = Commerce.Query.Domain.Entities.Cart;
-using Entity = Commerce.Query.Domain.Entities.Product;
 
 namespace Commerce.Query.Application.UserCases.Cart
 {
@@ -29,16 +26,23 @@ namespace Commerce.Query.Application.UserCases.Cart
         private readonly ICartItemRepository cartItemRepository;
         private readonly IProductDetailRepository productDetailRepository;
         private readonly IProductRepository productRepository;
+        private readonly IShopRepository shopRepository;
 
         /// <summary>
         /// Handler for get cart by id request
         /// </summary>
-        public GetCartByIdQueryHandler(ICartRepository cartRepository, ICartItemRepository cartItemRepository, IProductDetailRepository productDetailRepository, IProductRepository productRepository)
+        public GetCartByIdQueryHandler(
+                 ICartRepository cartRepository,
+                 ICartItemRepository cartItemRepository,
+                 IProductDetailRepository productDetailRepository,
+                 IProductRepository productRepository,
+                 IShopRepository shopRepository)
         {
             this.cartRepository = cartRepository;
             this.cartItemRepository = cartItemRepository;
             this.productDetailRepository = productDetailRepository;
             this.productRepository = productRepository;
+            this.shopRepository = shopRepository;
         }
 
         /// <summary>
@@ -61,7 +65,7 @@ namespace Commerce.Query.Application.UserCases.Cart
 
             if (cart == null)
             {
-                return Result.Ok(new CartDTO()); // Trả về giỏ hàng rỗng nếu không tìm thấy
+                return Result.Ok(new CartDTO());
             }
 
             var cartDto = new CartDTO
@@ -69,8 +73,10 @@ namespace Commerce.Query.Application.UserCases.Cart
                 Id = cart.Id,
                 UserId = cart.UserId,
                 TotalQuantity = cart.TotalQuantity,
-                CartItems = new List<CartItemDTO>()
+                ShopCarts = new List<ShopCartDTO>()
             };
+
+            var shopGroups = new Dictionary<Guid, ShopCartDTO>();
 
             foreach (var cartItem in cart.CartItems!)
             {
@@ -84,6 +90,9 @@ namespace Commerce.Query.Application.UserCases.Cart
                     Total = cartItem.Total
                 };
 
+                Guid? shopId = null;
+                string? shopName = null;
+
                 if (cartItem.ProductDetailId.HasValue)
                 {
                     var productDetail = await productDetailRepository.FindByIdAsync(cartItem.ProductDetailId.Value, true, cancellationToken);
@@ -96,15 +105,40 @@ namespace Commerce.Query.Application.UserCases.Cart
                             Id = productDetail.Id,
                             ProductId = productDetail.ProductId,
                             Size = productDetail.Size,
-                            Color = productDetail.Color
+                            Color = productDetail.Color,
+                            StockQuantity = productDetail.StockQuantity,
                         };
 
                         cartItemDto.ProductName = product?.Name;
                         cartItemDto.ProductImage = product?.Image;
+
+                        shopId = product?.ShopId;
+                        if (shopId.HasValue)
+                        {
+                            var shop = await shopRepository.FindByIdAsync(shopId.Value, true, cancellationToken);
+                            shopName = shop?.Name;
+                        }
+
+                        cartItemDto.ShopId = shopId;
+                        cartItemDto.ShopName = shopName;
                     }
                 }
 
-                cartDto.CartItems.Add(cartItemDto);
+                if (shopId.HasValue)
+                {
+                    if (!shopGroups.TryGetValue(shopId.Value, out var shopCart))
+                    {
+                        shopCart = new ShopCartDTO
+                        {
+                            ShopId = shopId,
+                            ShopName = shopName
+                        };
+                        shopGroups[shopId.Value] = shopCart;
+                        cartDto.ShopCarts.Add(shopCart);
+                    }
+
+                    shopGroups[shopId.Value].CartItems.Add(cartItemDto);
+                }              
             }
 
             return Result.Ok(cartDto);

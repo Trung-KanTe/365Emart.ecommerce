@@ -17,9 +17,11 @@
         public const string IMPORT_PRODUCT_ROUTE = "/importProduct";
         public const string CART_ROUTE = "/cart";
         public const string PRODUCT_REVIEW_ROUTE = "/productReview";
+        public const string PRODUCT_REVIEW_REPLY_ROUTE = "/productReviewReply";
         public const string ORDER_ROUTE = "/order";
         public const string ORDER_CANCEL_ROUTE = "/orderCancel";
         public const string PROMOTION_ROUTE = "/promotion";
         public const string PAYMENT_ROUTE = "/payment";
+        public const string WALLET_ROUTE = "/wallet";
     }
 }

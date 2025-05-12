@@ -10,6 +10,8 @@
         public decimal? Total { get; set; }
         public string? ProductName { get; set; }
         public string? ProductImage { get; set; }
+        public Guid? ShopId { get; set; }
+        public string? ShopName { get; set; }
         public ProductDetailDTO? ProductDetails { get; set; }
     }
 }

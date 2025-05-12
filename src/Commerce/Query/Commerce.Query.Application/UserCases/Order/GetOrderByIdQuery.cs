@@ -90,6 +90,7 @@ namespace Commerce.Query.Application.UserCases.Order
                             if (shop != null)
                             {
                                 orderDto.ShopName = shop.Name;
+                                orderDto.ShopId = shop.Id;  
                             }
                             // Gán ProductDetail vào OrderItem
                             orderItem.ProductDetails = productDetail.MapTo<ProductDetailDTO>();
