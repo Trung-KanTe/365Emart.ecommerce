@@ -9,6 +9,7 @@
         public const string FIELD_WAREHOUSE_NAME = "wh_Name";
         public const string FIELD_WAREHOUSE_ADDRESS = "wh_Address";
         public const string FIELD_WAREHOUSE_WARD_ID = "wh_WardId";
+        public const string FIELD_WAREHOUSE_SHOP_ID = "wh_ShopId";
         public const string FIELD_WAREHOUSE_INSERTED_AT = "wh_InsertedAt";
         public const string FIELD_WAREHOUSE_INSERTED_BY = "wh_InsertedBy";
         public const string FIELD_WAREHOUSE_UPDATED_AT = "wh_UpdatedAt";

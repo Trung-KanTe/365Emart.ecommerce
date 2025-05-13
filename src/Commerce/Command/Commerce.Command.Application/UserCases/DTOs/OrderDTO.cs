@@ -10,6 +10,7 @@ namespace Commerce.Command.Application.UserCases.DTOs
         public decimal? TotalAmount { get; set; }
         public decimal? DiscountValue { get; set; }
         public string? PaymentMethod { get; set; }
+        public string? Address { get; set; }
         public string? Status { get; set; }
         public DateTime? InsertedAt { get; set; }
         public Guid? InsertedBy { get; set; }

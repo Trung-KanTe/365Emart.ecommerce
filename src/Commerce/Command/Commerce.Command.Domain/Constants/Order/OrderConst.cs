@@ -11,6 +11,7 @@
         public const string FIELD_ORDER_PROMOTION_ID = "od_PromotionId";
         public const string FIELD_ORDER_TOTAL_AMOUNT = "od_TotalAmount";
         public const string FIELD_ORDER_PAYMENT_METHOD = "od_PaymentMethod";
+        public const string FIELD_ORDER_ADDRESS = "od_Address";
         public const string FIELD_ORDER_STATUS = "od_Status";
         public const string FIELD_ORDER_INSERTED_AT = "od_InsertedAt";
         public const string FIELD_ORDER_INSERTED_BY = "od_InsertedBy";

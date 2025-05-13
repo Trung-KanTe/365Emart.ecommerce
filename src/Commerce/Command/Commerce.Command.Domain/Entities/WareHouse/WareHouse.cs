@@ -21,6 +21,7 @@ namespace Commerce.Command.Domain.Entities.WareHouse
         /// Ward ID for the Warehouse's location
         /// </summary>
         public Guid? WardId { get; set; }
+        public Guid? ShopId { get; set; }
 
         /// <summary>
         /// Date when the Warehouse was created

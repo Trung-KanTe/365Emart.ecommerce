@@ -23,6 +23,7 @@ namespace Commerce.Command.Application.UserCases.Order
         public Guid? PromotionId { get; set; }
         public decimal? TotalAmount { get; set; }
         public string? PaymentMethod { get; set; }
+        public string? Address { get; set; }
         public string? Status { get; set; }
         public bool? IsDeleted { get; set; } = false;
         public ICollection<OrderItem>? OrderItems { get; set; }
@@ -53,9 +54,6 @@ namespace Commerce.Command.Application.UserCases.Order
         /// <returns>Result indicate whether delete action success or not</returns>
         public async Task<Result> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
-            var validator = Validator.Create(request);
-            validator.RuleFor(x => x.Id).NotNull().IsGuid();
-            validator.Validate();
             using var transaction = await orderRepository.BeginTransactionAsync(cancellationToken);
             try
             {

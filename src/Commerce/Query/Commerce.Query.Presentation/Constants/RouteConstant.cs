@@ -26,6 +26,7 @@
         public const string DISTRICT_ROUTE = "/district";
         public const string PROVINCE_ROUTE = "/province";
         public const string WALLET_ROUTE = "/wallet";
-        public const string STATISTICAL_ROUTE = "/statistical";       
+        public const string STATISTICAL_ROUTE = "/statistical";
+        public const string SHIPPING_ROUTE = "/shipping";
     }
 }

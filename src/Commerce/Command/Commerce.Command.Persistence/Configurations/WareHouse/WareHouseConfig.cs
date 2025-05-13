@@ -26,6 +26,9 @@ namespace Commerce.Command.Persistence.Configurations.WareHouse
             builder.Property(x => x.WardId)
                 .HasColumnName(WareHouseConst.FIELD_WAREHOUSE_WARD_ID);
 
+            builder.Property(x => x.ShopId)
+               .HasColumnName(WareHouseConst.FIELD_WAREHOUSE_SHOP_ID);
+
             builder.Property(x => x.InsertedAt)
                 .HasColumnName(WareHouseConst.FIELD_WAREHOUSE_INSERTED_AT);
 

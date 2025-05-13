@@ -30,6 +30,9 @@ namespace Commerce.Command.Persistence.Configurations.Order
                 .HasColumnName(OrderConst.FIELD_ORDER_PAYMENT_METHOD)
                 .HasMaxLength(OrderConst.ORDER_PAYMENT_METHOD_MAX_LENGTH);
 
+            builder.Property(x => x.Address)
+                .HasColumnName(OrderConst.FIELD_ORDER_ADDRESS);
+
             builder.Property(x => x.Status)
                 .HasColumnName(OrderConst.FIELD_ORDER_STATUS)
                 .HasMaxLength(OrderConst.ORDER_STATUS_MAX_LENGTH);

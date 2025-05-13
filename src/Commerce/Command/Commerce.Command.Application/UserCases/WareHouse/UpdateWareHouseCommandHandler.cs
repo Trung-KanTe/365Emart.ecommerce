@@ -19,6 +19,7 @@ namespace Commerce.Command.Application.UserCases.WareHouse
         public string? Name { get; set; }
         public string? Address { get; set; }
         public Guid? WardId { get; set; }
+        public Guid? ShopId { get; set; }
         public bool IsDeleted { get; set; }
     }
 

@@ -31,6 +31,7 @@ namespace Commerce.Query.Domain.Entities.Order
         /// Payment method used for the Order.
         /// </summary>
         public string? PaymentMethod { get; set; }
+        public string? Address { get; set; }
 
         /// <summary>
         /// Status of the Order.

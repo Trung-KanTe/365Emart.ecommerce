@@ -26,6 +26,9 @@ namespace Commerce.Query.Persistence.Configurations.Order
                 .HasColumnName(OrderConst.FIELD_ORDER_TOTAL_AMOUNT)
                 .IsRequired();
 
+            builder.Property(x => x.Address)
+               .HasColumnName(OrderConst.FIELD_ORDER_ADDRESS);
+
             builder.Property(x => x.PaymentMethod)
                 .HasColumnName(OrderConst.FIELD_ORDER_PAYMENT_METHOD)
                 .HasMaxLength(OrderConst.ORDER_PAYMENT_METHOD_MAX_LENGTH);

@@ -16,7 +16,7 @@ namespace Commerce.Command.Presentation.Service.WareHouse
     /// [ApiController]
     [ApiVersion(1)]
     [Route(RouteConstant.API_PREFIX + RouteConstant.WARE_HOUSE_ROUTE)]
-    [Authorize(Roles = "ADMIN,STAFF")]
+    //[Authorize(Roles = "ADMIN,STAFF")]
     public class wareHouseService : ApiController
     {
         private readonly IMediator mediator;

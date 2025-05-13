@@ -1,17 +1,12 @@
 ﻿using Commerce.Command.Application.UserCases.DTOs;
 using Commerce.Command.Contract.Abstractions;
-using Commerce.Command.Contract.Contants;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
-using Commerce.Command.Contract.Enumerations;
-using Commerce.Command.Contract.Errors;
 using Commerce.Command.Contract.Shared;
-using Commerce.Command.Domain.Abstractions.Repositories.Cart;
 using Commerce.Command.Domain.Abstractions.Repositories.Order;
 using Commerce.Command.Domain.Abstractions.Repositories.ProducStock;
 using Commerce.Command.Domain.Abstractions.Repositories.Product;
 using Commerce.Command.Domain.Abstractions.Repositories.Promotion;
 using Commerce.Command.Domain.Abstractions.Repositories.User;
-using Commerce.Command.Domain.Entities.Order;
 using Hangfire;
 using MediatR;
 using Entities = Commerce.Command.Domain.Entities.Order;
@@ -70,6 +65,7 @@ namespace Commerce.Command.Application.UserCases.Order
             orderNew.UserId = order.UserId;
             orderNew.TotalAmount = order.TotalAmount;
             orderNew.PromotionId = order.PromotionId;
+            orderNew.Address = order.Address;
 
             var promotion = await promotionRepository.FindByIdAsync(order.PromotionId.Value, true, cancellationToken);
             orderDTO.DiscountValue = promotion.DiscountValue;
