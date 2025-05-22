@@ -54,6 +54,11 @@ namespace Commerce.Command.Application.UserCases.Wallets
         {
             var order = await orderRepository.FindByIdAsync(request.OrderId!.Value, true, cancellationToken);
 
+            if (order.PaymentMethod == "VN-Pay")
+            {
+                return Result.Ok();
+            }
+
             var commissionAmount = order!.TotalAmount!.Value * 0.1m;
             var shopNetAmount = order.TotalAmount - commissionAmount;
 

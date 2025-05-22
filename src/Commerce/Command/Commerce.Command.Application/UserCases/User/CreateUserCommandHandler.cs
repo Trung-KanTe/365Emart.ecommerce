@@ -4,6 +4,8 @@ using Entities = Commerce.Command.Domain.Entities.User;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Domain.Entities.User;
+using Commerce.Command.Contract.Enumerations;
+using Commerce.Command.Contract.Errors;
 
 namespace Commerce.Command.Application.UserCases.User
 {
@@ -47,6 +49,14 @@ namespace Commerce.Command.Application.UserCases.User
         {
             // Create new User from request
             Entities.User? user = request.MapTo<Entities.User>();
+
+            var exitProduct = await userRepository.FindSingleAsync(x => x.Email == request.Email || x.Tel == request.Tel , true, cancellationToken);
+
+            if (exitProduct != null)
+            {
+                return Result.Failure(400, new Error(ErrorType.Conflict, "Product.DuplicateName", $"Product name '{request.Name}' already exists."));
+            }
+
             // Validate for user
             user!.Validate();
             // Begin transaction

@@ -28,15 +28,9 @@ namespace Commerce.Query.Presentation.Service.Promotion
         /// </summary>
         /// <returns>Action result with list of samples as data</returns>
         [MapToApiVersion(1)]
-        [HttpGet]
-        public async Task<IActionResult> GetShippingFee([FromQuery] Guid userId, [FromQuery] Guid orderId)
+        [HttpPost]
+        public async Task<IActionResult> GetShippingFee([FromBody] GetShippingFee query)
         {
-            var query = new GetShippingFee
-            {
-                UserId = userId,
-                OrderId = orderId
-            };
-
             var result = await mediator.Send(query);
             return Ok(result);
         }

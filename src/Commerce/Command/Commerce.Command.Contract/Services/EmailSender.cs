@@ -59,5 +59,20 @@ namespace Commerce.Command.Contract.Services
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
+
+        public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+        {
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress("365-Emart", _configuration["SenderEmail"]));
+            email.To.Add(new MailboxAddress("", toEmail));
+            email.Subject = subject;
+            email.Body = new TextPart("html") { Text = htmlBody };
+
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            await smtp.ConnectAsync(_configuration["SmtpServer"], int.Parse(_configuration["SmtpPort"]!), false);
+            await smtp.AuthenticateAsync(_configuration["SenderEmail"], _configuration["SenderPassword"]);
+            await smtp.SendAsync(email);
+            await smtp.DisconnectAsync(true);
+        }
     }
 }

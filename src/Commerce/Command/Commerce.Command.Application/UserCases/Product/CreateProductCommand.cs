@@ -5,6 +5,8 @@ using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Domain.Entities.Product;
 using Commerce.Command.Contract.Abstractions;
+using Commerce.Command.Contract.Errors;
+using Commerce.Command.Contract.Enumerations;
 
 namespace Commerce.Command.Application.UserCases.Product
 {
@@ -52,6 +54,16 @@ namespace Commerce.Command.Application.UserCases.Product
         {
             // Create new Product from request
             Entities.Product? product = request.MapTo<Entities.Product>();
+
+            var normalizedName = request.Name!.Trim().ToLower();
+
+            var exitProduct = await productRepository.FindSingleAsync(x => x.Name.ToLower() == normalizedName, true, cancellationToken);
+
+            if (exitProduct != null)
+            {
+                return Result.Failure(400, new Error( ErrorType.Conflict, "Product.DuplicateName", $"Product name '{request.Name}' already exists."));
+            }
+
             // Validate for product
             if (request.Image is not null)
             {

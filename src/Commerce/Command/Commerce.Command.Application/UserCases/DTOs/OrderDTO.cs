@@ -7,6 +7,7 @@ namespace Commerce.Command.Application.UserCases.DTOs
         public Guid? Id { get; set; }
         public Guid? UserId { get; set; }
         public Guid? PromotionId { get; set; }
+        public int Shipping {  get; set; }
         public decimal? TotalAmount { get; set; }
         public decimal? DiscountValue { get; set; }
         public string? PaymentMethod { get; set; }

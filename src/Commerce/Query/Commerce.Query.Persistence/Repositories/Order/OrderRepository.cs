@@ -30,7 +30,6 @@ namespace Commerce.Query.Persistence.Repositories.Order
         public virtual void Update(Entities.Order entity)
         {
             entity.UpdatedAt = DateTime.UtcNow;
-            entity.UpdatedBy = signManager.CurrentUser.Id;
             Entities.Update(entity);
         }
     }

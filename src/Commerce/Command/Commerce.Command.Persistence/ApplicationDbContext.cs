@@ -1,4 +1,7 @@
 ﻿using System.Reflection;
+using Commerce.Command.Domain.Entities.Order;
+using Commerce.Command.Domain.Entities.Product;
+using Commerce.Command.Domain.Entities.Shop;
 using Microsoft.EntityFrameworkCore;
 
 namespace Commerce.Command.Persistence
@@ -15,6 +18,12 @@ namespace Commerce.Command.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderCancel> OrderCancels { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductDetail> ProductDetails { get; set; }
+        public DbSet<Shop> Shops { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

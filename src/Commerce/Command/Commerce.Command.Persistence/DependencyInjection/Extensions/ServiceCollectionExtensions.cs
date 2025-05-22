@@ -1,4 +1,5 @@
-﻿using Commerce.Command.Domain.Abstractions.Repositories;
+﻿using Commerce.Command.Contract.Abstractions;
+using Commerce.Command.Domain.Abstractions.Repositories;
 using Commerce.Command.Domain.Abstractions.Repositories.Brand;
 using Commerce.Command.Domain.Abstractions.Repositories.Cart;
 using Commerce.Command.Domain.Abstractions.Repositories.Category;
@@ -96,6 +97,8 @@ namespace Commerce.Command.Persistence.DependencyInjection.Extensions
             services.AddScoped<IShopWalletTransactionRepository, ShopWalletTransactionRepository>();
             services.AddScoped<IPlatformWalletRepository, PlatformWalletRepository>();
             services.AddScoped<IPlatformWalletTransactionRepository, PlatformWalletTransactionRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ILowStockNotifier, LowStockNotifier>();
             return services;
         }
     }

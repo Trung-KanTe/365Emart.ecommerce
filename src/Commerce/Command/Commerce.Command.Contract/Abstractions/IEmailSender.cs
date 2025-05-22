@@ -4,5 +4,7 @@
     {
         Task SendOrderConfirmationEmailAsync(string toEmail, Guid orderId);
         Task SendUserForgotPassword(string toEmail, string name, string resetToken);
+        Task SendEmailAsync(string toEmail, string subject, string htmlBody);
+
     }
 }

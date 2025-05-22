@@ -5,6 +5,7 @@ using Commerce.Command.Domain.Constants.Partner;
 using Commerce.Command.Domain.Constants.Product;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Entitie = Commerce.Command.Domain.Entities.Shop;
 
 namespace Commerce.Command.Domain.Entities.Product
 {
@@ -74,6 +75,7 @@ namespace Commerce.Command.Domain.Entities.Product
         /// Status indicating if the Product is deleted (soft delete)
         /// </summary>
         public bool? IsDeleted { get; set; } = true;
+        public Entitie.Shop Shop { get; set; }
 
         [NotMapped]
         [JsonIgnore]

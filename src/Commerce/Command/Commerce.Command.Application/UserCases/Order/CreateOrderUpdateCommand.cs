@@ -26,7 +26,15 @@ namespace Commerce.Command.Application.UserCases.Order
         public Guid? UserId { get; set; }
         public Guid? PromotionId { get; set; }
         public decimal? TotalAmount { get; set; }
+        public int Shipping {  get; set; }
         public ICollection<OrderItem>? OrderItems { get; set; }
+        public ICollection<ShopShippingInfo>? Shops { get; set; }
+    }
+
+    public class ShopShippingInfo
+    {
+        public Guid ShopId { get; set; }
+        public int Shipping { get; set; }
     }
 
     /// <summary>
@@ -120,16 +128,25 @@ namespace Commerce.Command.Application.UserCases.Order
                     {
                         var promotion = await promotionRepository.FindByIdAsync(request.PromotionId.Value, true, cancellationToken);
                         if (promotion != null && promotion.DiscountValue > 0)
-                        {         
-                            discountAmount = promotion.DiscountValue;                          
+                        {
+                            discountAmount = promotion.DiscountValue;
                         }
                     }
+
+                    // ✅ Xác định ShopId của group này
+                    var firstItem = group.FirstOrDefault();
+                    var productDetail = productDetails.FirstOrDefault(pd => pd.Id == firstItem?.ProductDetailId);
+                    var product = products.FirstOrDefault(p => p.Id == productDetail?.ProductId);
+                    var shopId = product?.ShopId ?? Guid.Empty;
+
+                    // ✅ Lấy phí ship tương ứng từ request.Shops
+                    var shopShipping = request.Shops?.FirstOrDefault(s => s.ShopId == shopId)?.Shipping ?? 0;
 
                     var order = new Entities.Order
                     {
                         UserId = userId,
                         PromotionId = request.PromotionId,
-                        TotalAmount = groupTotal - discountAmount > 0 ? groupTotal - discountAmount + 25000 : 0,
+                        TotalAmount = groupTotal - discountAmount > 0 ? groupTotal - discountAmount + shopShipping : 0,
                         InsertedAt = DateTime.UtcNow,
                         OrderItems = new List<Entities.OrderItem>()
                     };
@@ -147,7 +164,7 @@ namespace Commerce.Command.Application.UserCases.Order
 
                     createdOrders.Add(order);
 
-                    // Trừ tồn kho
+                    // Trừ tồn kho như cũ...
                     foreach (var item in order.OrderItems)
                     {
                         var stock = await productStockRepository.FindSingleAsync(x => x.ProductDetailId == item.ProductDetailId, true, cancellationToken);

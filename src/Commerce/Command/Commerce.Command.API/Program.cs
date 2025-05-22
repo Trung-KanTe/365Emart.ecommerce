@@ -3,6 +3,7 @@ using Commerce.Command.API.DependencyInjection.Extensions;
 using Commerce.Command.API.DependencyInjection.Options;
 using Commerce.Command.API.Middleware;
 using Commerce.Command.Application.DependencyInjection.Extension;
+using Commerce.Command.Contract.Abstractions;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Infrastructure.DependencyInjection.Extensions;
 using Commerce.Command.Persistence.DependencyInjection.Extensions;
@@ -68,5 +69,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapPresentation();
 app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IOrderService>(
+    "cancel-pending-orders-job",
+    x => x.CancelPendingOrdersAsync(),
+    Cron.Hourly
+);
+
+RecurringJob.AddOrUpdate<ILowStockNotifier>(
+    "low-stock-notifier-job",
+    x => x.NotifyShopsWithLowStockAsync(),
+    Cron.Hourly
+);
 
 app.Run();

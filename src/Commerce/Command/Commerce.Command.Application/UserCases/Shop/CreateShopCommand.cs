@@ -4,6 +4,8 @@ using Entities = Commerce.Command.Domain.Entities.Shop;
 using MediatR;
 using Commerce.Command.Contract.DependencyInjection.Extensions;
 using Commerce.Command.Contract.Abstractions;
+using Commerce.Command.Contract.Enumerations;
+using Commerce.Command.Contract.Errors;
 
 namespace Commerce.Command.Application.UserCases.Shop
 {
@@ -55,6 +57,15 @@ namespace Commerce.Command.Application.UserCases.Shop
             Entities.Shop? shop = request.MapTo<Entities.Shop>();
             // Validate for shop
             //shop!.ValidateCreate();
+
+            var normalizedName = request.Name!.Trim().ToLower();
+
+            var exitProduct = await shopRepository.FindSingleAsync(x => x.Name.ToLower() == normalizedName, true, cancellationToken);
+
+            if (exitProduct != null)
+            {
+                return Result.Failure(400, new Error(ErrorType.Conflict, "Product.DuplicateName", $"Product name '{request.Name}' already exists."));
+            }
 
             if (request.Image is not null)
             {

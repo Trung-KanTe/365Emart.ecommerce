@@ -15,8 +15,16 @@ namespace Commerce.Query.Application.UserCases.GHTK
     /// </summary>
     public class GetShippingFee : IRequest<Result<ShippingFee>>
     {
-        public Guid? UserId { get; init; }
-        public Guid? OrderId { get; init; }
+        public List<Guid> OrderIds { get; init; }
+        public string Province { get; init; }
+        public string District { get; init; }
+        public List<ShopShippingDto> Shops { get; init; }
+    }
+
+    public class ShopShippingDto
+    {
+        public Guid ShopId { get; set; }
+        public int Shipping { get; set; }
     }
 
     /// <summary>
@@ -53,40 +61,89 @@ namespace Commerce.Query.Application.UserCases.GHTK
         public async Task<Result<ShippingFee>> Handle(GetShippingFee request,
                                                        CancellationToken cancellationToken)
         {
-            // Lấy đơn hàng
-            var order = await orderRepository.FindByIdAsync(request.OrderId.Value, true, cancellationToken, includeProperties: x => x.OrderItems);
+            var shopShippingFees = new Dictionary<Guid, int>();  // Sử dụng Dictionary để lưu trữ phí ship theo từng shop
 
-
-            // Lấy sản phẩm đầu tiên để xác định shop (giả sử 1 đơn chỉ từ 1 shop)
-            var firstProductDetail = await productDetailRepository.FindByIdAsync(order.OrderItems.First().ProductDetailId.Value);
-
-            var firstProduct = await productRepository.FindByIdAsync(firstProductDetail.ProductId.Value);
-
-            var shop = await shopRepository.FindByIdAsync(firstProduct.ShopId.Value);
-
-            var fromAddress = ParseAddress(shop.Address);  
-            var toAddress = ParseAddress(order.Address);
-
-            // Tổng khối lượng đơn hàng (ví dụ tính bằng product.Weight * quantity)
-            int totalWeight = 0;
-            foreach (var item in order.OrderItems)
+            foreach (var orderId in request.OrderIds)
             {
-                var productDetail = await productDetailRepository.FindByIdAsync(item.ProductDetailId.Value);
-                var product = await productRepository.FindByIdAsync(productDetail.ProductId.Value);
-                var category = await categoryRepository.FindByIdAsync(product.CategoryId!.Value);
+                // Lấy đơn hàng
+                var order = await orderRepository.FindByIdAsync(orderId, true, cancellationToken, includeProperties: x => x.OrderItems);
 
-                int estimatedWeight = EstimateWeightByCategory(category.Name); // product.Category là string
-                totalWeight += estimatedWeight * item.Quantity!.Value;
+                // Lấy sản phẩm đầu tiên để xác định shop (giả sử 1 đơn chỉ từ 1 shop)
+                var firstProductDetail = await productDetailRepository.FindByIdAsync(order.OrderItems.First().ProductDetailId.Value);
+                var firstProduct = await productRepository.FindByIdAsync(firstProductDetail.ProductId.Value);
+                var shop = await shopRepository.FindByIdAsync(firstProduct.ShopId.Value);
+
+                var fromAddress = ParseAddress(shop.Address);
+                var toAddress = new AddressDto
+                {
+                    Province = request.Province,
+                    District = request.District,
+                };
+
+                // Tổng khối lượng đơn hàng
+                int totalWeight = 0;
+                foreach (var item in order.OrderItems)
+                {
+                    var productDetail = await productDetailRepository.FindByIdAsync(item.ProductDetailId.Value);
+                    var product = await productRepository.FindByIdAsync(productDetail.ProductId.Value);
+                    var category = await categoryRepository.FindByIdAsync(product.CategoryId!.Value);
+
+                    int estimatedWeight = EstimateWeightByCategory(category.Name); // product.Category là string
+                    totalWeight += estimatedWeight * item.Quantity!.Value;
+                }
+
+                // Gọi API tính phí của Giao Hàng Tiết Kiệm
+                var shippingFee = await CalculateShippingFee(fromAddress, toAddress, totalWeight);
+
+                // Cộng phí shipping cho shop tương ứng
+                if (shopShippingFees.ContainsKey(shop.Id))
+                {
+                    shopShippingFees[shop.Id] += shippingFee;  // Cộng phí vào shop đã có
+                }
+                else
+                {
+                    shopShippingFees[shop.Id] = shippingFee;  // Thêm shop mới vào dictionary
+                }
             }
 
-            // Gọi API tính phí của Giao Hàng Tiết Kiệm
-            var shippingFee = await CalculateShippingFee(fromAddress, toAddress, totalWeight);
-
-            return (new ShippingFee
+            foreach (var orderId in request.OrderIds)
             {
-                Id = order.Id,
-                Shipping = shippingFee
-            });
+                var order = await orderRepository.FindByIdAsync(
+                    orderId,
+                    true,
+                    cancellationToken,
+                    includeProperties: x => x.OrderItems);
+
+                // Lấy shopId của order
+                var firstProductDetail = await productDetailRepository.FindByIdAsync(
+                    order.OrderItems.First().ProductDetailId.Value);
+                var firstProduct = await productRepository.FindByIdAsync(firstProductDetail.ProductId.Value);
+                var shopId = firstProduct.ShopId.Value;
+
+                // Phí cũ từ request
+                var oldShipping = request.Shops
+                    .FirstOrDefault(s => s.ShopId == shopId)?.Shipping ?? 0;
+
+                // Phí mới đã tính
+                var newShipping = shopShippingFees.ContainsKey(shopId)
+                    ? shopShippingFees[shopId]
+                    : 0;
+
+                // Cập nhật TotalAmount = TotalAmount cũ - oldShipping + newShipping
+                order.TotalAmount = order.TotalAmount - oldShipping + newShipping;
+
+                // Lưu lại thay đổi
+                orderRepository.Update(order);
+            }
+            await orderRepository.SaveChangesAsync();
+
+            // Tính tổng phí ship của tất cả các shop
+            var totalShippingFee = shopShippingFees.Values.Sum();
+
+            return new ShippingFee
+            {
+                Shipping = totalShippingFee  // Trả về tổng phí ship của tất cả các shop
+            };
         }
 
         private async Task<int> CalculateShippingFee(AddressDto from, AddressDto to, int weight)
